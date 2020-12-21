@@ -1,10 +1,13 @@
 
+require('dotenv').config(); 
 // const { json } = require("express");
 const mongoose = require("mongoose");
 const validator = require("validator");
-let link = "mongodb://localhost/api_db";
+let link = process.env.DB_LINK;
+console.log("link is: ",link); 
 var json_data;
 var document;
+var model;
 var conn_err;
 
 function pr(r1, r2, r3, r4) {
@@ -25,40 +28,7 @@ function pr(r1, r2, r3, r4) {
 }
 
 
-// setTimeout(() => {
-//    mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).then((data) => {
-//     console.log("connectd succss!!");
-// }).catch(error => {
-//     if (error) {
-//         conn_err = error;
-//         // console.log(error); 
-//     }
-// }); 
-// }, 200);
 
-
-
-// const mongoose = require('mongoose');
-
-var profile_detail_schema = new mongoose.Schema({
-    
-   self_profile: {
-        name:String,
-        email:String,
-        status:String,
-        img_path: String
-    },
-    friend_list:{
-        name:String,
-        email:String,
-        status:String 
-    },
-    old_message
-
-});
-
-
-var model = mongoose.model("user_detail", profile_detail_schema);
 
 
 function connect_to_db() {
@@ -66,14 +36,36 @@ function connect_to_db() {
 
 }
 
+var profile_schema = new mongoose.Schema({
+
+    self_profile: {
+        name: String,
+        email: String,
+        status: String,
+        img_path: String
+    },
+   friend:{
+    name: String,
+    email: String
+   },
+    chat_message: [] ,
+    recieve_message:[],
+    is_blocked:Boolean
+
+});
+
+function create_model() {
+    model = mongoose.model(json_data.email,profile_schema); 
+    
+}
+
+
 
 function is_validate_data(json_data) {
     if (!validator.isEmail(json_data.email)) {
         return "Enter   a valid email";
     }
-    else if (json_data.name.length == 0) {
-        return "Enter   a valid name";
-    }
+
     else if (json_data.pass.length < 6) {
         return "Password Must be Greater than 6 charcters";
     }
@@ -82,14 +74,14 @@ function is_validate_data(json_data) {
 
 
 function trim_data() {
-    if (json_data.email && json_data.name && json_data.pass) {
+    if (json_data.email  && json_data.pass) {
         json_data.email = json_data.email.trim();
-        json_data.name = json_data.name.trim();
+     
         json_data.pass = json_data.pass.trim();
     } else {
         return false;
     }
-    if (json_data.email == "" || json_data.name == "" || json_data.pass == "") {
+    if (json_data.email == ""  || json_data.pass == "") {
         return false;
     } else {
         return true;
@@ -97,11 +89,8 @@ function trim_data() {
 
 }
 
-async function save_doc() {
+async function fetch_profile_data () {
 
-
-
-    pr("save funcion called");
     var result;
     result = await model.findOne({ email: json_data.email });
 
@@ -111,7 +100,7 @@ async function save_doc() {
         try {
             pr("documetn is: ", document);
             result = await document.save();
-           
+
             console.log("result of save is; ");
 
 
@@ -132,72 +121,39 @@ async function save_doc() {
 
 
 
-// setTimeout(() => {
-//     mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
-//     pr("settime out called"); 
-//     // pr("setfuncion claed')");
-//     model.find((error, data) => {
-//         if (!error) {
-//             console.log("--------------Start----------------------");
-//             console.log(data);
-//             model.estimatedDocumentCount((err, count) => {
-//                 console.log(err);
-//                 console.log(count);
-
-//                 mongoose.connection.close();
-//                 console.log("--------------END----------------------");
-//             });
-
-//         }
-//         else{
-//            pr("error occur in displaying data",error); 
-//         }
-
-
-//     });
-
-
-// }, 2000);
-
-
-
 async function main(data) {
     connect_to_db();
     let result;
-    json_data = data; pr("json data is: ", json_data);
-    result = trim_data(json_data); pr("trim data", result);
-
-
-    if (!result) {  mongoose.connection.close(); return "missing data" };
-
-
-    result = is_validate_data(json_data); pr("valid data", result);
-
+    json_data = data; 
+    result = trim_data(json_data); 
+    if (!result) { mongoose.connection.close(); return "missing data" };
+    result = is_validate_data(json_data); 
     if (result != true) { mongoose.connection.close(); return result; }
 
 
     document = new model(json_data);
-   result = await save_doc();
-   mongoose.connection.close();
-   return result; 
- 
+    result = await fetch_profile_data();
+    mongoose.connection.close();
+    return result;
+
+
 
 }
 
-mongoose.connection.on("open", function () {
-    pr(" ***coonected->save_email");
-})
+// mongoose.connection.on("open", function () {
+//     pr(" ***coonected->save_email");
+// })
 
-mongoose.connection.on("close", function () {
-    pr(" ***Discoonected");
-})
-mongoose.connection.on("error", function (error) {
-    pr(" ***error occured", error);
-})
-// main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
-module.exports = main;
+// mongoose.connection.on("close", function () {
+//     pr(" ***Discoonected");
+// })
+// mongoose.connection.on("error", function (error) {
+//     pr(" ***error occured", error);
+// })
+// // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
+// module.exports = main;
 
 
 
-// console.log(!validator.isEmail("wondvgail.com" ))
+// // console.log(!validator.isEmail("wondvgail.com" ))
 
