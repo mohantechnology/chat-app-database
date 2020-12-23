@@ -1,10 +1,12 @@
 
     require('dotenv').config(); 
     
+const { json } = require('express');
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
     var json_data;
     var model ; 
+    var profile_schema; 
     // var document;
     // var conn_err;
 
@@ -59,15 +61,16 @@
 
  function  create_schema_model (){
 
-        var profile_schema = new mongoose.Schema({
-            friend_name: String,
-            friend_email: String,
-            chat_message: [] ,
-            recieve_message:[],
-            is_blocked:Boolean
-        
-        });
-        model  = mongoose.model (json_data.name,profile_schema); 
+    profile_schema = new mongoose.Schema({
+        friend_name: String,
+        friend_email: String,
+        chat_message: [] ,
+        recieved_message:[],
+        sent_message:[],
+        is_blocked:Boolean
+    
+    });
+     
     
 
     }
@@ -76,26 +79,30 @@
         //if acitivate method is token  number check number else check token string 
 
 
-       
-            result = await model.findOne({ friend_name: json_data.friend_name} );
+     //add yourself to your friend collection
+     let model1  = mongoose.models[json_data.friend_name]  === undefined ?  mongoose.model (json_data.friend_name,profile_schema) :  mongoose.model (json_data.friend_name);
+
+
+ //check if you are added to your  friend  list or not 
+        result = await model1.findOne({ friend_name: json_data.name} );
 
    
         if (!result) {
 
-             document = new model ( {
-                 friend_name:json_data.friend_name,
-                 friend_email:json_data.friend_email,
-                 chat_message:["Added in list"],
+           let   document1 = new model1 ( {
+                 friend_name:json_data.name,
+                 friend_email:json_data.email,
+                 chat_message:[{"current_date" :[{message: json_data.name + " Added in list" ,"current_time":"1:20"}]}],
                  is_blocked:false
              })
             try {
-                pr("documetn is: ", document);
-                result = await document.save();
+                pr("documetn is: ", document1);
+                result = await document1.save();
 
                 console.log("result of save is; ");
 
 
-                return "Successfully added to friend list";
+
             } catch (error) {
 
                 console.log((error))
@@ -109,6 +116,40 @@
 
             return "Already  added to friend list ";
         }
+
+
+
+
+ // also  add your friend to your collection
+
+        let model2  =  mongoose.models[json_data.name] === undefined ?  mongoose.model (json_data.name,profile_schema) :  mongoose.model (json_data.name); 
+
+      
+
+           let   document2 = new model2 ( {
+                 friend_name:json_data.friend_name,
+                 friend_email:json_data.friend_email,
+                 chat_message:[{"current_date" :[{message: json_data.friend_name +  " Added in list" ,"current_time":"1:20"}]}],
+                 is_blocked:false
+             })
+            try {
+                pr("documetn is: ", document2);
+                result = await document2.save();
+
+                console.log("result of save is; ");
+
+
+                return "Successfully added to friend list";
+            } catch (error) {
+
+                console.log((error))
+                return "something went wrong " ;
+            }
+
+
+            //
+        
+  
 
 
 

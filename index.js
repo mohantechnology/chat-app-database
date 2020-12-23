@@ -7,6 +7,8 @@ const save_email = require(__dirname + '/save_email');
 const activate_account = require(__dirname + '/activate_account');
 const profile = require(__dirname + '/profile'); 
 const add_friend = require(__dirname + '/add_friend'); 
+const save_readed_message = require(__dirname + '/save_readed_message');
+const save_unreaded_message = require(__dirname + '/save_unreaded_message');
 
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false }); 
@@ -51,7 +53,7 @@ app.get("/activate", (req, res) => {
     // pr(req.url); 
 
 
-    activate_account({ email:  "mandingo@gmail.com ", token_no:"mystring" })
+    activate_account({ email:  "mandingo@gmail.com ",name:"mandingo", token_no:"mystring" })
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{
@@ -59,6 +61,8 @@ app.get("/activate", (req, res) => {
     }); 
 
 });
+
+
 // app.get("/profile", (req, res) => {
 //     // pr(req.url);
 
@@ -75,7 +79,20 @@ app.get("/activate", (req, res) => {
 app.get("/add_friend", (req, res) => {
     // pr(req.url);
  
-    add_friend({ name:"mandingo", friend_name:"friend-name1",  friend_email: "friend@gmail.com "})
+    add_friend({ name:"mandingos", friend_name:"mohan", email:"mohan@gmail.com", friend_email: "mandingos@gmail.com "})
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error); 
+    }); 
+
+});
+
+app.get("/save_readed_message", (req, res) => {
+    // pr(req.url); 
+
+
+    save_readed_message({ name:"mandingos", friend_name:"mohan", message:"hello how are yoy mohan?" })
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{
@@ -84,18 +101,18 @@ app.get("/add_friend", (req, res) => {
 
 });
 
+app.get("/save_unreaded_message", (req, res) => {
+    // pr(req.url); 
 
-// app.get("/save_message", (req, res) => {
-//     // pr(req.url);
- 
-//     profile({ email: "example1@gmail.com ", pass:"1re3456" })
-//     .then(data=>{     
-//         res.send(data);  
-//     }).catch(error=>{
-//         pr("catch",error); 
-//     }); 
 
-// });
+    save_unreaded_message({ name:"mandingos", friend_name:"mohan", message:"mandingos send message to mohan?" })
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{
+        pr("catch",error); 
+    }); 
+
+});
 
 app.listen(port, () => {
     console.log("listening to port " + port);
