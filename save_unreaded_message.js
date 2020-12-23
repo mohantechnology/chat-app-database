@@ -114,7 +114,7 @@
     // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
 
 
-// main({ name:"mohan", friend_name:"mandingos", message:"##mohan sended the message but madingo not recieved " }); 
+// main({ name:"mad_max", friend_name:"mandingos", message:"**mad max  sended the message but madingo not recieved " }); 
 // main({ name:"mandingos", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
 // main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;
 module.exports = main;

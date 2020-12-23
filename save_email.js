@@ -182,6 +182,8 @@ require('dotenv').config();
 
     }
 
-
+// main({email:  "magic_masala@gmail.com ", name: "magic_masala", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}); 
+// main({email:  "mad_max@gmail.com ", name: "mad_max", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}); 
+// main({email:  "maggi@gmail.com ", name: "maggi", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}); 
 module.exports = main;
 

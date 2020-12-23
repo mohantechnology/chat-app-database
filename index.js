@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
 
 
 
-
+ 
 app.get("/register", (req, res) => {
    
     pr(req.url); 
@@ -53,7 +53,7 @@ app.get("/activate", (req, res) => {
     // pr(req.url); 
 
 
-    activate_account({ email:  "mandingo@gmail.com ",name:"mandingo", token_no:"mystring" })
+    activate_account({ email:  "magic_masala@gmail.com ",name:"magic_masala", token_no:"mystring" })
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{
@@ -63,17 +63,20 @@ app.get("/activate", (req, res) => {
 });
 
 
-// app.get("/profile", (req, res) => {
-//     // pr(req.url);
+app.get("/profile", (req, res) => {
+    // pr(req.url);
 
-//     profile({ email: "example1@gmail.com ", pass:"1re3456" })
-//     .then(data=>{     
-//         res.send(data);  
-//     }).catch(error=>{
-//         pr("catch",error); 
-//     }); 
+    profile({ name: "mohan", pass:"1re3456" })
+    .then(data=>{  
+        data.response="success"   
+        res.json(data); ;  
+    }).catch(error=>{
+        pr("catch",error); 
 
-// });
+        res.json({response:"error" ,message:"something went wrong"}); ;  
+    }); 
+
+});
 
 
 app.get("/add_friend", (req, res) => {
