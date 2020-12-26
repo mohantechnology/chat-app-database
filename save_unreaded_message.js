@@ -55,7 +55,7 @@
     }
 
     async function save_unreaded_message() {
-        //if acitivate method is token  number check number else check token string 
+        //i
 
 
                 let model1  =  mongoose.models[json_data.name] === undefined ?  mongoose.model (json_data.name,profile_schema) :  mongoose.model (json_data.name); 
@@ -101,21 +101,12 @@
         return result;
     }
 
-    // mongoose.connection.on("open", function () {
-    //     pr(" ***coonected");
-    // })
-
-    // mongoose.connection.on("close", function () {
-    //     pr(" ***Discoonected");
-    // })
-    // mongoose.connection.on("error", function (error) {
-    //     pr(" ***error occured", error);
-    // })
-    // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
 
 
-// main({ name:"mad_max", friend_name:"mandingos", message:"**mad max  sended the message but madingo not recieved " }); 
-// main({ name:"mandingos", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
-// main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;
+    // main({ name:"mad_max", friend_name:"magic_masala", message:"########mad_max  sended the message but magic masala  not recieved " }).then(data=>{
+    //     pr("main result is; ",data); 
+    // });
+
+
 module.exports = main;
 

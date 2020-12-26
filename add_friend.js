@@ -162,11 +162,11 @@ const { json } = require('express');
         connect_to_db();
         let result;
         json_data = data; pr("json data is: ", json_data);
-        result = validate_and_trim_data(json_data);
-        if (!result) {
-            mongoose.connection.close();
-            return "missing data"
-        };
+        // result = validate_and_trim_data(json_data);
+        // if (!result) {
+        //     mongoose.connection.close();
+        //     return "missing data"
+        // };
 
         if(!model){
             create_schema_model(); 
@@ -177,17 +177,10 @@ const { json } = require('express');
         return result;
     }
 
-    // mongoose.connection.on("open", function () {
-    //     pr(" ***coonected");
-    // })
-
-    // mongoose.connection.on("close", function () {
-    //     pr(" ***Discoonected");
-    // })
-    // mongoose.connection.on("error", function (error) {
-    //     pr(" ***error occured", error);
-    // })
-    // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
+    
+    //  main({ name: "mad_max",friend_name:"magic_masala"}).then(data=>{
+    //      pr("main result is; ",data); 
+    //  });
 
 
 
