@@ -1,0 +1,20 @@
+
+
+
+
+
+   
+const mongoose = require("mongoose");
+//  const    profile_schema = new 
+ module.exports =  new  mongoose.Schema({
+    friend_name: String,
+    friend_email: String,
+    chat_message: [],
+    recieved_message: [],
+    sent_message: [],
+    current_status: String,
+    is_blocked: Boolean
+
+});
+
+

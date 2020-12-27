@@ -3,7 +3,7 @@
     const { json } = require("body-parser");
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
-    var json_data;
+
     // var document;
     // var conn_err;
 
@@ -72,27 +72,27 @@
 
     }
 
-    async  function  create_new_collection(){
+    // async  function  create_new_collection(){
 
-    var profile_schema = new mongoose.Schema({
+    // var profile_schema = new mongoose.Schema({
 
-        self_profile: {
-            name: String,
-            email: String,
-            status: String,
-            img_path: String
-        },
-       friend:{ 
-        name: String,
-        email: String
-       },
-        chat_message: [] ,
-        recieve_message:[],
-        is_blocked:Boolean
+    //     self_profile: {
+    //         name: String,
+    //         email: String,
+    //         status: String,
+    //         img_path: String
+    //     },
+    //    friend:{ 
+    //     name: String,
+    //     email: String
+    //    },
+    //     chat_message: [] ,
+    //     recieve_message:[],
+    //     is_blocked:Boolean
     
-    });
+    // });
 
-    }
+    // }
 
     async function activate_account() {
         //if acitivate method is token  number check number else check token string 
@@ -136,49 +136,26 @@
     }
 
 
-
-    // setTimeout(() => {
-    //     mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
-    //     pr("settime out called");
-    //     // pr("setfuncion claed')");
-    //     model.find((error, data) => {
-    //         if (!error) {
-    //             console.log("--------------Start----------------------");
-    //             console.log(data);
-    //             model.estimatedDocumentCount((err, count) => {
-    //                 console.log(err);
-    //                 console.log(count);
-
-    //                 mongoose.connection.close();
-    //                 console.log("--------------END----------------------");
-    //             });
-
-    //         }
-    //         else {
-    //             pr("error occur in displaying data", error);
-    //         }
-
-
-    //     });
-
-
-    // }, 2000);
-
-
-
     async function main(data) {
         connect_to_db();
         let result;
-        json_data = data; pr("json data is: ", json_data);
-        result = validate_and_trim_data(json_data);
-        if (!result) {
-            mongoose.connection.close();
-            return "missing data"
-        };
+        // json_data = data; pr("json data is: ", json_data);
+        // result = validate_and_trim_data(json_data);
+        // if (!result) {
+        //     mongoose.connection.close();
+        //     return "missing data"
+        // };
         result = await activate_account();
         mongoose.connection.close();
         return result;
     }
+
+    main({email:  "ray@gmail.com ", name: "road", pass: "1re3456" }).then( data=>{
+            pr("returned data  main is: ",data); 
+        
+        }).catch(error=>{
+            pr("error from main ",error); 
+        }) ;
 
     // mongoose.connection.on("open", function () {
     //     pr(" ***coonected");

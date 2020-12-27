@@ -103,7 +103,7 @@
 
 
 
-    // main({ name:"mad_max", friend_name:"magic_masala", message:"########mad_max  sended the message but magic masala  not recieved " }).then(data=>{
+    // main({ name:"mad_max", friend_name:"magic_masala", message:" $$hello magic masalla by mad max " }).then(data=>{
     //     pr("main result is; ",data); 
     // });
 

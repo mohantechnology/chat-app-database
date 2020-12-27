@@ -5,6 +5,7 @@ const { json } = require('body-parser');
 const mongoose = require("mongoose");
 let link = process.env.DB_LINK;
 var json_data;
+var user_detail_schema ;
 var profile_schema;
 var model;
 // var document;
@@ -39,9 +40,9 @@ function connect_to_db() {
 
 
 
-function create_schema_model() {
 
-    profile_schema = new mongoose.Schema({
+
+ profile_schema = new mongoose.Schema({
         friend_name: String,
         friend_email: String,
         chat_message: [],
@@ -53,7 +54,27 @@ function create_schema_model() {
 
 
 
-}
+
+
+
+ 
+     user_detail_schema = new mongoose.Schema({
+        name: String,
+        email: String,
+        password: String,
+        token_str: String,
+        token_no: String,
+        expire_time: String,
+        account_status: String,
+        current_status: String,
+        profile_img: String,
+    });
+
+
+
+
+
+
 
 async function fetch_profile_data() {
     // read all recived message from friends 
@@ -63,16 +84,23 @@ async function fetch_profile_data() {
     let model1 = mongoose.models[json_data.name] === undefined ? mongoose.model(json_data.name, profile_schema) : mongoose.model(json_data.name);
 
 
+
     result = await  model1.find({},{friend_name:1,_id:0,recieved_message:1}) ; 
     // result = JSON.stringify(result,null,4); 
     pr("result of find is: ",result); 
     let i,len= result.length; 
-    let response = {data:{}}; 
+    let response = {data : []};
+    
     for(let i =0; i<len; i++ ){
     //    console.log(result[i].friend_name, " send you ",result[i].recieved_message.length); 
-    response.data[ result[i].friend_name ] = result[i].recieved_message.length;
+    response.data.push( { name: result[i].friend_name , count: result[i].recieved_message.length, img: "racoon.jpg"});
+     
     // response.count = 
     }
+
+   //#todo
+    response.status="ok"; 
+
     return  response; 
     
 }
@@ -87,7 +115,7 @@ async function main(data) {
     let result;
     json_data = data;
         create_schema_model();
-    
+         
 
     result = await fetch_profile_data();
     mongoose.connection.close();
@@ -108,7 +136,7 @@ async function main(data) {
 // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
 
 
-main({ name: "mohan", email:"mohan@gmail.com"});
+// main({ name: "mohan", email:"mohan@gmail.com"});
 // main({ name:"", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
 // main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;
 module.exports = main;
