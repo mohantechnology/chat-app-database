@@ -7,7 +7,7 @@ const validator = require("validator");
 var link = process.env.DB_LINK;
 var crypto = require("crypto");
 var user_detail_schema = require("./schema/user_detail");
-var profile_schema  =  require("./schema/profile");
+// var profile_schema  =  require("./schema/profile");
 
 function pr(r1, r2, r3, r4) {
 
@@ -38,28 +38,30 @@ function connect_to_db() {
 
 function is_validate_data(json_data) {
     if (!validator.isEmail(json_data.email)) {
-        return "Enter   a valid email";
+        return { status:"error" , message:"Enter  a valid email"};
     }
     else if (json_data.name.length == 0) {
-        return "Enter   a valid name";
+        return { status:"error" , message:"Enter   a valid name"};
+
     }
     else if (json_data.password.length < 6) {
-        return "passwordword Must be Greater than 6 charcters";
+        return { status:"error" , message:"Password  Must be Greater than or equal to 6 charcters"};
+    
     }
-    return true;
+    return  json_data;
 }
 
 
 function trim_data(json_data) {
-    if (json_data.email && json_data.name && json_data.password) {
+    if (json_data.email && json_data.name && json_data.password && json_data.conform_password) {
         json_data.email = json_data.email.trim();
         json_data.name = json_data.name.trim();
         json_data.password = json_data.password.trim();
     } else {
-        return false;
+        return { status:"error" , message:"All Fields are Required"};
     }
-    if (json_data.email == "" || json_data.name == "" || json_data.password == "") {
-        return false;
+    if (json_data.email == "" || json_data.name == "" || json_data.password == "" ||   json_data.conform_password =="" ) {
+        return { status:"error" , message:"All Fields are Required"};
     } else {
         return json_data;
     }
@@ -97,9 +99,9 @@ async function save_doc(json_data) {
         try {
 
 
-
+  //total 50 random character starting with cz
             json_data.u_id = "cz"+  u_id;
-            json_data.token_str = crypto.randomBytes(25).toString('hex');
+            json_data.token_str = crypto.randomBytes(24).toString('hex');
             json_data.token_no = Math.round((Math.random() * 1000000)).toString();
             document = new model(json_data);
             pr("documetn is: ", document);
@@ -111,7 +113,7 @@ async function save_doc(json_data) {
             return {status:"ok",message: "Acount Registered Successfully"}; 
         } catch (error) {
 
-            console.log((error))
+            return {status:"error",message: "something went wrong "}; 
         }
 
     }
@@ -128,20 +130,20 @@ async function save_doc(json_data) {
 async function main(data) {
     connect_to_db();
     let result;
-    json_data = data;
-    result = trim_data(json_data);
+  
+    result = trim_data(data);
 
 
-    if (!result) { mongoose.connection.close(); return "missing data" };
+    if (result.status=="error" ) { mongoose.connection.close(); return {status:"error",message: "missing data" }};
 
 
-    result = is_validate_data(json_data); pr("valid data", result);
+    result = is_validate_data(data); pr("valid data", result);
 
-    if (result != true) { mongoose.connection.close(); return result; }
+    if (result.status=="error") { mongoose.connection.close(); return result; }
 
 
 
-    result = await save_doc(json_data);
+    result = await save_doc(result);
     //  pr( "model userd_deait", mongoose.models); 
     mongoose.connection.close();
     return result;

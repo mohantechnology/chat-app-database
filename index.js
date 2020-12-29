@@ -36,13 +36,14 @@ app.get("/",(req, res) => {
  
 app.post("/register", (req, res) => {
    
-    pr(req.url); 
-    save_email({email:  "mandingo@gmail.com ", name: "mandingo", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}).
+    pr("incoming data ",req.body); 
+    save_email(req.body).
     then(data=>{
-        pr("then " ,data);
-        res.send("ok");  
+        // pr("then " ,data);
+        res.json(data);  
     }).catch(error=>{
-        pr("catch",error); 
+        pr("catch",error);
+        res.json({status: "error",message: "something went wrong"});  
     }); 
 
 });

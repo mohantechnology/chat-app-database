@@ -126,9 +126,9 @@ async function main(data) {
 // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
 
 
-main({ name:"magic_masala" , friend_name:  "mad_max"}).then(data=>{
- pr("result of main ",data); 
-});
+// main({ name:"magic_masala" , friend_name:  "mad_max"}).then(data=>{
+//  pr("result of main ",data); 
+// });
 
 // main({ name:"", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
 // main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;

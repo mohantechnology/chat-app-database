@@ -167,9 +167,9 @@ const { json } = require('express');
     }
 
     
-     main({ name: "mohan",friend_name:"mad_max"  , u_id: "czdf72dfce1710b41d4fa9" , friend_u_id: "czf96c5e50d312d5309048" ,date:"27/12/2020", time: "11:43" }).then(data=>{
-         pr("main result is; ",data); 
-     });
+    //  main({ name: "mohan",friend_name:"mad_max"  , u_id: "czdf72dfce1710b41d4fa9" , friend_u_id: "czf96c5e50d312d5309048" ,date:"27/12/2020", time: "11:43" }).then(data=>{
+    //      pr("main result is; ",data); 
+    //  });
 
 
 

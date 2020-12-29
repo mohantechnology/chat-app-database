@@ -90,12 +90,12 @@
     }
 
 
-main({ email: "mohan3@gmail.com ", name: "road" }).then(data => {
-    pr("returned data  main is: ", data);
+// main({ email: "mohan3@gmail.com ", name: "road" }).then(data => {
+//     pr("returned data  main is: ", data);
 
-}).catch(error => {
-    pr("error from main ", error);
-});
+// }).catch(error => {
+//     pr("error from main ", error);
+// });
 
 module.exports = main;
 

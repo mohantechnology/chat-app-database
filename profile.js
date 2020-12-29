@@ -118,11 +118,11 @@ async function main(data) {
 }
 
 
-main({ email: "mad_max@gmail.com", name: "mad_max", password: "123456" ,u_id:"czf96c5e50d312d5309048" }).then(data => {
-    pr("returned data  main is: ", data);
+// main({ email: "mad_max@gmail.com", name: "mad_max", password: "123456" ,u_id:"czf96c5e50d312d5309048" }).then(data => {
+//     pr("returned data  main is: ", data);
 
-}).catch(error => {
-    pr("error from main ", error);
-});
+// }).catch(error => {
+//     pr("error from main ", error);
+// });
 module.exports = main;
 
