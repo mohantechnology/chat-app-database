@@ -61,11 +61,11 @@
                 pr("temp_data= ", temp_data);
 
                
-                return "Account is Activated Successfully";
+                return {status:"ok" , message:  "Account is Activated Successfully"};
 
 
             } catch (error) {
-                return "something went wrong";
+                return {status:"error" , message:"something went wrong" } ;
             }
 
 
@@ -73,7 +73,7 @@
         }
         else {
 
-            return "Account Not Registered";
+            return {status:"error" , message:"Account Not Registered" } ;
         }
 
 
@@ -102,5 +102,6 @@
     //     pr("error from main ", error);
     // });
 
+    // http://localhost:3000/activate/momoland@gmail.com/token_str/afc373f842e2c5189ac61b3e3160902d743633fcf9bfc51b
 module.exports = main;
 

@@ -47,17 +47,19 @@ app.post("/register", (req, res) => {
     }); 
 
 });
+
 app.post("/activate", (req, res) => {
     // pr(req.url); 
+    pr("incoming data to activate ",req.body); 
 
-
-    activate_account({ email:  "magic_masala@gmail.com ",name:"magic_masala", token_no:"mystring" })
-    .then(data=>{     
-        res.send(data);  
-    }).catch(error=>{
-        pr("catch",error); 
-        res.json({status:"error" ,message:"something went wrong"}); ;  
-    }); 
+    activate_account(req.body).
+        then(data=>{
+            // pr("then " ,data);
+            res.json(data);  
+        }).catch(error=>{
+            pr("catch",error);
+            res.json({status: "error",message: "something went wrong"});  
+        }); 
 
 });
 
