@@ -4,8 +4,7 @@
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
     var json_data;
-    var profile_schema; 
-    var model ; 
+    var profile_schema  =  require("./schema/profile");
     // var document;
     // var conn_err;
 
@@ -38,89 +37,71 @@
 
 
 
- function  create_schema_model (){
 
-        profile_schema = new mongoose.Schema({
-            friend_name: String,
-            friend_email: String,
-            chat_message: [] ,
-            recieved_message:[],
-            sent_message:[],
-            is_blocked:Boolean
-        
-        });
-     
-    
+    async function save_readed_message(json_data) {
+        //i
 
-    }
-
-    async function save_readed_message() {
-      // save readed message to collection.chat_message
-
-         // save message to your collection.chat_message 
-                let model1  =  mongoose.models[json_data.name] === undefined ?  mongoose.model (json_data.name,profile_schema) :  mongoose.model (json_data.name); 
-     
-
+             ///save to  chat_message in  your collection
+                let model1  =  mongoose.models[json_data.u_id] === undefined ?  mongoose.model (json_data.u_id,profile_schema) :  mongoose.model (json_data.u_id); 
+                // pr("monosees schemaafirst -- are: '",mongoose.model[json_data.name] ); 
+                // pr("monosees schemaa are: '",mongoose.models[json_data.name]); 
                     result = await  model1.updateOne (
-                        { friend_name: json_data.friend_name},
-                        {"$push":{chat_message :{
-                                                    date:json_data.date,
+                        { friend_u_id: json_data.friend_u_id},
+                        {"$push":{chat_message :{date:json_data.date,
                                                     time:json_data.time,
                                                     message:json_data.message,
                                                     direction:"out",
                                                }}}); 
                                     
-                   
-         // save message to your friend collection.chat_message                       
-                let model2  = mongoose.models[json_data.friend_name]  === undefined ?  mongoose.model (json_data.friend_name,profile_schema) :  mongoose.model (json_data.friend_name); 
-  
-                result = await  model2.updateOne ({ friend_name: json_data.name},
-                    {"$push":{chat_message:{
-                    date:json_data.date,
+                pr("result sent_message is: '",result); 
+                if(result== null || result.nModified == 0){
+                    pr({status:"error", message :"Not able to save message.  "});
+                }
+                let model2  = mongoose.models[json_data.friend_u_id]  === undefined ?  mongoose.model (json_data.friend_u_id,profile_schema) :  mongoose.model (json_data.friend_u_id); 
+                // pr("monosees schemaa are: '",mongoose.models.(json_data.name)); 
+                // pr("monosees schemaa are: '",mongoose.models[json_data.friend_name]); 
+
+                // save chat_message to your friends collection 
+                result = await  model2.updateOne ({ friend_u_id: json_data.u_id},
+                    {"$push":{chat_message:{date:json_data.date,
                     time:json_data.time,
                     message:json_data.message,
                     direction:"in",
                }}});
+
+               if(result== null || result.nModified == 0){
+                pr ({status:"error", message :"Not able to send message. Please Retry Again "});
+            }
           
-           return  "message saved sucessfully"; 
+           return {status: "ok" ,message:   "message sended sucessfully"}; 
    
     }
-
-
-
 
 
 
     async function main(data) {
         connect_to_db();
         let result;
-        json_data = data;
-
-
-        if(!profile_schema){
-            create_schema_model(); 
+        try{
+           result = await save_readed_message(data);  
+        }catch(err){
+           mongoose.connection.close();
+            return {status: "error",message: "something went wrong "}
         }
-        
-        result = await save_readed_message();
         mongoose.connection.close();
+        
         return result;
     }
 
-    // mongoose.connection.on("open", function () {
-    //     pr(" ***coonected");
-    // })
-
-    // mongoose.connection.on("close", function () {
-    //     pr(" ***Discoonected");
-    // })
-    // mongoose.connection.on("error", function (error) {
-    //     pr(" ***error occured", error);
-    // })
-    // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
 
 
-// main({ name:"mandingos", friend_name:"mohan", message:"*__( 0<<>>0 )______mandingos send message to maoh" }); 
-// main({ name:"mandingos", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
-// main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;
+    // main({ email: "mad_max@gmail.com", name: "mad_max", password: "123456" ,u_id:"czf96c5e50d312d5309048",friend_u_id:"czdf72dfce1710b41d4fa9" ,time:"12:58",date: "12/28/2020" ,message:"))))maa hoo mad_max ->tu haa mohan" }).then(data => {
+    //         pr("returned data  main is: ", data);
+        
+    //     }).catch(error => {
+    //         pr("error from main ", error);
+    //     });
+
+
 module.exports = main;
 

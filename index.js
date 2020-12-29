@@ -6,7 +6,7 @@ const port = process.env.PORT || 9000;
 const save_email = require(__dirname + '/save_email');
 const activate_account = require(__dirname + '/activate_account');
 const profile = require(__dirname + '/profile'); 
-const add_friend = require(__dirname + '/add_friend'); 
+const accept_friend_request = require(__dirname + '/accept_friend_request'); 
 const save_readed_message = require(__dirname + '/save_readed_message');
 const save_unreaded_message = require(__dirname + '/save_unreaded_message');
 const login = require(__dirname + '/login'); 
@@ -55,6 +55,7 @@ app.post("/activate", (req, res) => {
         res.send(data);  
     }).catch(error=>{
         pr("catch",error); 
+        res.json({status:"error" ,message:"something went wrong"}); ;  
     }); 
 
 });
@@ -91,14 +92,15 @@ app.post("/profile", (req, res) => {
 });
 
 
-app.post("/add_friend", (req, res) => {
+app.post("/accept_friend_request", (req, res) => {
     // pr(req.url);
  
-    add_friend({ name:"mandingos", friend_name:"mohan", email:"mohan@gmail.com", friend_email: "mandingos@gmail.com "})
+    accept_friend_request({ name:"mandingos", friend_name:"mohan", email:"mohan@gmail.com", friend_email: "mandingos@gmail.com "})
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{ 
-        pr("catch",error); 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
     }); 
 
 });

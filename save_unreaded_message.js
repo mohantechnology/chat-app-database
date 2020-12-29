@@ -4,8 +4,7 @@
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
     var json_data;
-    var profile_schema; 
-    var model ; 
+    var profile_schema  =  require("./schema/profile");
     // var document;
     // var conn_err;
 
@@ -38,49 +37,43 @@
 
 
 
- function  create_schema_model (){
 
-        profile_schema = new mongoose.Schema({
-            friend_name: String,
-            friend_email: String,
-            chat_message: [] ,
-            recieved_message:[],
-            sent_message:[],
-            is_blocked:Boolean
-        
-        });
-     
-    
-
-    }
-
-    async function save_unreaded_message() {
+    async function save_unreaded_message(json_data) {
         //i
 
-
-                let model1  =  mongoose.models[json_data.name] === undefined ?  mongoose.model (json_data.name,profile_schema) :  mongoose.model (json_data.name); 
+             ///save to  send_mail in  your collection
+                let model1  =  mongoose.models[json_data.u_id] === undefined ?  mongoose.model (json_data.u_id,profile_schema) :  mongoose.model (json_data.u_id); 
                 // pr("monosees schemaafirst -- are: '",mongoose.model[json_data.name] ); 
                 // pr("monosees schemaa are: '",mongoose.models[json_data.name]); 
                     result = await  model1.updateOne (
-                        { friend_name: json_data.friend_name},
+                        { friend_u_id: json_data.friend_u_id},
                         {"$push":{sent_message :{date:json_data.date,
                                                     time:json_data.time,
                                                     message:json_data.message,
                                                     direction:"out",
                                                }}}); 
                                     
-                                            
-                let model2  = mongoose.models[json_data.friend_name]  === undefined ?  mongoose.model (json_data.friend_name,profile_schema) :  mongoose.model (json_data.friend_name); 
+                pr("result sent_message is: '",result); 
+                if(result== null || result.nModified == 0){
+                    return {status:"error", message :"Not able to send message. Please Retry Again "};
+                }
+                let model2  = mongoose.models[json_data.friend_u_id]  === undefined ?  mongoose.model (json_data.friend_u_id,profile_schema) :  mongoose.model (json_data.friend_u_id); 
                 // pr("monosees schemaa are: '",mongoose.models.(json_data.name)); 
                 // pr("monosees schemaa are: '",mongoose.models[json_data.friend_name]); 
-                result = await  model2.updateOne ({ friend_name: json_data.name},
+
+                // save recived message to your friends collection 
+                result = await  model2.updateOne ({ friend_u_id: json_data.u_id},
                     {"$push":{recieved_message:{date:json_data.date,
                     time:json_data.time,
                     message:json_data.message,
                     direction:"in",
                }}});
+
+               if(result== null || result.nModified == 0){
+                return {status:"error", message :"Not able to send message. Please Retry Again "};
+            }
           
-           return  "message sended sucessfully"; 
+           return {status: "ok" ,message:   "message sended sucessfully"}; 
    
     }
 
@@ -89,23 +82,25 @@
     async function main(data) {
         connect_to_db();
         let result;
-        json_data = data;
-
-
-        if(!profile_schema){
-            create_schema_model(); 
+        try {
+               result = await save_unreaded_message(data);
+        } catch (error) {
+              mongoose.connection.close();
+              return {status:"error",message: "something went wrong"}; 
         }
-        
-        result = await save_unreaded_message();
+     
         mongoose.connection.close();
         return result;
     }
 
 
 
-    // main({ name:"mad_max", friend_name:"magic_masala", message:" $$hello magic masalla by mad max " }).then(data=>{
-    //     pr("main result is; ",data); 
-    // });
+    // main({ email: "mad_max@gmail.com", name: "mad_max", password: "123456" ,u_id:"czf96c5e50d312d5309048",friend_u_id:"czdf72dfce1710b41d4fa9" ,time:"12:58",date: "12/28/2020" ,message:"****maa hoo mad_max ->tu haa mohan" }).then(data => {
+    //         pr("returned data  main is: ", data);
+        
+    //     }).catch(error => {
+    //         pr("error from main ", error);
+    //     });
 
 
 module.exports = main;

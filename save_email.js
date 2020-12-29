@@ -4,10 +4,10 @@
 require('dotenv').config();
 const mongoose = require("mongoose");
 const validator = require("validator");
-let link = process.env.DB_LINK;
+var link = process.env.DB_LINK;
 var crypto = require("crypto");
 var user_detail_schema = require("./schema/user_detail");
-
+var profile_schema  =  require("./schema/profile");
 
 function pr(r1, r2, r3, r4) {
 
@@ -43,22 +43,22 @@ function is_validate_data(json_data) {
     else if (json_data.name.length == 0) {
         return "Enter   a valid name";
     }
-    else if (json_data.pass.length < 6) {
-        return "Password Must be Greater than 6 charcters";
+    else if (json_data.password.length < 6) {
+        return "passwordword Must be Greater than 6 charcters";
     }
     return true;
 }
 
 
 function trim_data(json_data) {
-    if (json_data.email && json_data.name && json_data.pass) {
+    if (json_data.email && json_data.name && json_data.password) {
         json_data.email = json_data.email.trim();
         json_data.name = json_data.name.trim();
-        json_data.pass = json_data.pass.trim();
+        json_data.password = json_data.password.trim();
     } else {
         return false;
     }
-    if (json_data.email == "" || json_data.name == "" || json_data.pass == "") {
+    if (json_data.email == "" || json_data.name == "" || json_data.password == "") {
         return false;
     } else {
         return json_data;
@@ -98,7 +98,7 @@ async function save_doc(json_data) {
 
 
 
-            json_data.u_id = u_id;
+            json_data.u_id = "cz"+  u_id;
             json_data.token_str = crypto.randomBytes(25).toString('hex');
             json_data.token_no = Math.round((Math.random() * 1000000)).toString();
             document = new model(json_data);
@@ -108,7 +108,7 @@ async function save_doc(json_data) {
             console.log("result of save is; ");
 
 
-            return "success";
+            return {status:"ok",message: "Acount Registered Successfully"}; 
         } catch (error) {
 
             console.log((error))
@@ -117,7 +117,7 @@ async function save_doc(json_data) {
     }
     else {
 
-        return "Email already Exists";
+        return {status:"ok",message: "Email already Exists"};
     }
 
 
@@ -142,6 +142,7 @@ async function main(data) {
 
 
     result = await save_doc(json_data);
+    //  pr( "model userd_deait", mongoose.models); 
     mongoose.connection.close();
     return result;
 
@@ -149,15 +150,12 @@ async function main(data) {
 }
 
 
-main({ email: "yrerar@gmgail.com ", name: "road", pass: "1re3456" }).then(data => {
-    pr("returned data  main is: ", data);
+// main({ email: "mad_max@gmail.com ", name: "mad_max", password: "123456" }).then(data => {
+//     pr("returned data  main is: ", data);
 
-}).catch(error => {
-    pr("error from main ", error);
-});
+// }).catch(error => {
+//     pr("error from main ", error);
+// });
 
-// main({email:  "magic_masala@gmail.com ", name: "magic_masala", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}); 
-// main({email:  "mad_max@gmail.com ", name: "mad_max", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}); 
-// main({email:  "maggi@gmail.com ", name: "maggi", pass: "1re3456" ,token_str:"mystring",token_no:"mystring"}); 
 module.exports = main;
 

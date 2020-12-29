@@ -3,11 +3,9 @@
     
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
-    var json_data;
-    var  user_detail_schema; 
-    var model ; 
-    // var document;
-    // var conn_err;
+    var user_detail_schema = require("./schema/user_detail");
+    
+
 
     function pr(r1, r2, r3, r4) {
 
@@ -37,25 +35,24 @@
 
 
 
-
- function  create_schema_model (){
-
-    var user_detail_schema = new mongoose.Schema({
-        name: String,
-        email: String,
-        password: String,
-        token_str: String,
-        token_no: String,
-        expire_time: String,
-        account_status: String,
-        current_status: String,
-        profile_img: String,
-    });
+    function trim_data(json_data) {
+        if ( json_data &&  json_data.email && json_data.password) {
+            json_data.email = json_data.email.trim();
+            json_data.password = json_data.password.trim();
+        } else {
+            return false;
+        }
+        if (json_data.email == "" || json_data.password == "") {
+            return false;
+        } else {
+            return json_data;
+        }
     
-
     }
 
-    async function check_login_detail() {
+
+
+    async function check_login_detail(json_data) {
       // save readed message to collection.chat_message
 
          // save message to your collection.chat_message 
@@ -65,7 +62,7 @@
                     result = await  model1.findOne({email:json_data.email,password:json_data.password}); 
                     pr("result of login is: ",result); 
                     if(result ){
-                        return {name:result.name,email:result.email,status:"ok"}; 
+                        return {name:result.name,email:result.email,status:"ok" ,u_id: result.u_id }; 
                     }
                     else{
                         return {status:"error" ,message:"Account Not Registered "}; 
@@ -80,33 +77,25 @@
     async function main(data) {
         connect_to_db();
         let result;
-        json_data = data;
-
-
-        if(! user_detail_schema){
-            create_schema_model(); 
+        json_data = 
+        result = trim_data(data )
+         
+        if(!result){
+            mongoose.connection.close();
+            return {status:"error",message:"missing data"}; 
         }
-        
-        result = await check_login_detail();
+        result = await check_login_detail(result);
         mongoose.connection.close();
         return result ; 
     }
 
-    // mongoose.connection.on("open", function () {
-    //     pr(" ***coonected");
-    // })
 
-    // mongoose.connection.on("close", function () {
-    //     pr(" ***Discoonected");
-    // })
-    // mongoose.connection.on("error", function (error) {
-    //     pr(" ***error occured", error);
-    // })
-    // main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
+main({ email: "mohan3@gmail.com ", name: "road" }).then(data => {
+    pr("returned data  main is: ", data);
 
+}).catch(error => {
+    pr("error from main ", error);
+});
 
-// main({ name:"mandingos", friend_name:"mohan", message:"*__( 0<<>>0 )______mandingos send message to maoh" }); 
-// main({ name:"mandingos", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
-// main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;
 module.exports = main;
 
