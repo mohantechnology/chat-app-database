@@ -10,6 +10,7 @@ const accept_friend_request = require(__dirname + '/accept_friend_request');
 const save_readed_message = require(__dirname + '/save_readed_message');
 const save_unreaded_message = require(__dirname + '/save_unreaded_message');
 const find_friend = require(__dirname + '/find_friend');
+const send_friend_request = require(__dirname + '/send_friend_request');
 const login = require(__dirname + '/login'); 
 
 
@@ -111,6 +112,21 @@ app.post("/find_friend", (req, res) => {
     }); 
 
 });
+app.post("/send_friend_request", (req, res) => {
+    // pr(req.url);
+  ("incoming dat at model -index route ",req.body); 
+    send_friend_request(req.body)
+    .then(data=>{  
+       console.log(data); 
+        res.json(data); ;  
+    }).catch(error=>{
+        pr("catch",error); 
+
+        res.json({status:"error" ,message:"something went wrong"}); ;  
+    }); 
+
+});
+
 
 
 app.post("/accept_friend_request", (req, res) => {

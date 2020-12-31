@@ -102,6 +102,6 @@
     //     pr("error from main ", error);
     // });
 
-    // http://localhost:3000/activate/mOhan@gmail.com/token_no/64282
+    // http://localhost:3000/activate/goat@gmail.com/token_str/ad7ce0145fad538f1c5998f5f4c8cbbc2c28e2b8039fe823
 module.exports = main;
 

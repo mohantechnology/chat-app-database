@@ -65,7 +65,7 @@
                     result = await  model1.findOneAndUpdate({email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
                     pr("result of login is: ",result); 
                     if(result ){
-                        return {name:result.name,email:result.email,status:"ok" ,token:temp_id ,u_id:result.u_id}; 
+                        return {name:result.name,email:result.email,status:"ok" ,token:temp_id ,u_id:result.u_id ,p_id:result.p_id}; 
                     }
                     else{
                         return {status:"error" ,message:"Account Not Registered "}; 
