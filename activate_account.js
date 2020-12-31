@@ -102,6 +102,6 @@
     //     pr("error from main ", error);
     // });
 
-    // http://localhost:3000/activate/momoland@gmail.com/token_str/afc373f842e2c5189ac61b3e3160902d743633fcf9bfc51b
+    // http://localhost:3000/activate/mOhan@gmail.com/token_no/64282
 module.exports = main;
 

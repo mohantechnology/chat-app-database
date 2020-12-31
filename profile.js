@@ -57,8 +57,10 @@ async function fetch_profile_data(json_data) {
       //findOne user exist in user_detail
 
       let model0 = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
-
-      result = await   model0.findOne({email: json_data.email,u_id:json_data.u_id,password:json_data.password});
+          
+      pr("Finding data is; ",{email: json_data.email,token:json_data.token,u_id:json_data.u_id});
+    //   result = await   model0.findOne({email: json_data.email, u_id:json_data.u_id,token:json_data.token});
+    result = await   model0.findOne({email: json_data.email,token:json_data.token,u_id:json_data.u_id});
       pr("reslut of model 0 is: ", result); 
       if(result==null|| result.account_status !="active"){
           return {status:"error",message:"Not a valid user"}
@@ -68,12 +70,12 @@ async function fetch_profile_data(json_data) {
     // read all recived message from friends 
 
     // save message to your collection.chat_message 
- 
+      let user_name=result.name; 
 
 
-
-    let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.name);
-
+    console.log(mongoose.models);  
+    let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.u_id);
+     pr("after model reigstration ",mongoose.models); 
   
     
 
@@ -93,11 +95,11 @@ async function fetch_profile_data(json_data) {
 
    //#todo
     response.status="ok"; 
-
+    response.name=user_name; 
     return  response; 
     }else{
 
-        return {status:"ok",data:[]} ;
+        return {status:"ok",data:[],name:user_name} ;
     }
     // result = JSON.stringify(result,null,4); 
  

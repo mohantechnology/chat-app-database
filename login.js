@@ -1,6 +1,6 @@
 
     require('dotenv').config(); 
-    
+    var crypto = require("crypto");
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
     var user_detail_schema = require("./schema/user_detail");
@@ -28,7 +28,7 @@
 
 
     function connect_to_db() {
-        mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
+        mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true,useFindAndModify:false }).catch(error => { });
 
     }
 
@@ -57,12 +57,15 @@
 
          // save message to your collection.chat_message 
                 let model1  =  mongoose.models["user_detail"] === undefined ?  mongoose.model ("user_detail", user_detail_schema) :  mongoose.model ("user_detail"); 
-     
-
-                    result = await  model1.findOne({email:json_data.email,password:json_data.password}); 
+      
+             
+        
+                   let temp_id =  crypto.randomBytes(10).toString('hex');
+                //    console.log("find and update ",{email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
+                    result = await  model1.findOneAndUpdate({email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
                     pr("result of login is: ",result); 
                     if(result ){
-                        return {name:result.name,email:result.email,status:"ok" ,u_id: result.u_id }; 
+                        return {name:result.name,email:result.email,status:"ok" ,token:temp_id ,u_id:result.u_id}; 
                     }
                     else{
                         return {status:"error" ,message:"Account Not Registered "}; 

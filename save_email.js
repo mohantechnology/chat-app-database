@@ -83,7 +83,7 @@ async function save_doc(json_data) {
         let u_id; 
         // let count=2; 
         while (true) {
-            u_id = crypto.randomBytes(10).toString('hex');
+            u_id = "cz"  + crypto.randomBytes(10).toString('hex');
             // u_id = "thisifsnotuni";
         
             result = await model.findOne({ u_id: u_id });
@@ -94,19 +94,37 @@ async function save_doc(json_data) {
                 break;
             }
         }
+        //generate unique public id for send friend request 
+        let  p_id ; 
+        while (true) {
+            p_id = "pz" + crypto.randomBytes(10).toString('hex');
+         
+        
+            result = await model.findOne({ p_id:p_id });
+            // pr("----- result  of  ith iteration is is: -> ", result);
+            
+            if (result == null) {
+                pr("breaking ")
+                break;
+            }
+        }
+
 
 
         try {
 
 
   //total 50 random character starting with cz
-            json_data.u_id = "cz"+  u_id;
+            json_data.u_id =   u_id;
+            json_data.p_id = p_id;
             json_data.token_str = crypto.randomBytes(24).toString('hex');
             json_data.token_no = Math.round((Math.random() * 1000000)).toString();
+
             document = new model(json_data);
             pr("documetn is: ", document);
             result = await document.save();
 
+            
             console.log("result of save is; ");
 
 
@@ -151,8 +169,9 @@ async function main(data) {
 
 }
 
-
-// main({ email: "mad_max@gmail.com ", name: "mad_max", password: "123456" }).then(data => {
+// json_data.email && json_data.name && json_data.password && json_data.conform_password
+// main({ email: "momo@gmail.com ", name: "momo", password: "123456",
+// conform_password: "123456",account_type:"private" }).then(data => {
 //     pr("returned data  main is: ", data);
 
 // }).catch(error => {
@@ -160,4 +179,11 @@ async function main(data) {
 // });
 
 module.exports = main;
+
+
+
+
+
+
+
 
