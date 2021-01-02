@@ -3,8 +3,8 @@
     
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
-    var json_data;
     var profile_schema  =  require("./schema/profile");
+    var user_detail_schema = require("./schema/user_detail");
     // var document;
     // var conn_err;
 
@@ -41,11 +41,42 @@
     async function save_unreaded_message(json_data) {
         //i
 
+
+        // let result1;
+
+
+        // pr("incoming data at fetch _profile ", json_data);
+    
+        // //findOne user exist in user_detail
+    
+        // let model0 = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
+    
+        // // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+    
+        // result1 = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+        // pr("reslut of model 0 is: ", result1);
+    
+    
+         
+    
+    
+        // if (result1 == null || result1.account_status != "active") {
+        //     return { status: "error", message: "Not a valid user" }
+        // }
+    
+
+
+
+
+
+
+
+
              ///save to  send_mail in  your collection
                 let model1  =  mongoose.models[json_data.u_id] === undefined ?  mongoose.model (json_data.u_id,profile_schema) :  mongoose.model (json_data.u_id); 
                 // pr("monosees schemaafirst -- are: '",mongoose.model[json_data.name] ); 
                 // pr("monosees schemaa are: '",mongoose.models[json_data.name]); 
-                    result = await  model1.updateOne (
+                 let   result = await  model1.updateOne (
                         { friend_u_id: json_data.friend_u_id},
                         {"$push":{sent_message :{date:json_data.date,
                                                     time:json_data.time,
@@ -81,13 +112,7 @@
 
     async function main(data) {
         connect_to_db();
-        let result;
-        try {
-               result = await save_unreaded_message(data);
-        } catch (error) {
-              mongoose.connection.close();
-              return {status:"error",message: "something went wrong"}; 
-        }
+        let result= await save_unreaded_message(data); 
      
         mongoose.connection.close();
         return result;
@@ -95,12 +120,12 @@
 
 
 
-    // main({ email: "mad_max@gmail.com", name: "mad_max", password: "123456" ,u_id:"czf96c5e50d312d5309048",friend_u_id:"czdf72dfce1710b41d4fa9" ,time:"12:58",date: "12/28/2020" ,message:"****maa hoo mad_max ->tu haa mohan" }).then(data => {
-    //         pr("returned data  main is: ", data);
+    main({ email: "maggi@gmail.com", name: "maggi", password: "123456" ,u_id:"cz483c8e7a8ffb75a7530e",friend_u_id:"czd73fb9342f6aaba3e400" ,time:"12:58",date: "12/28/2020" ,message:"****maa hoo magii ->tu haa mohan" }).then(data => {
+            pr("returned data  main is: ", data);
         
-    //     }).catch(error => {
-    //         pr("error from main ", error);
-    //     });
+        }).catch(error => {
+            pr("error from main ", error);
+        });
 
 
 module.exports = main;

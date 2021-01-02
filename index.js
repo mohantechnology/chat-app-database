@@ -12,6 +12,9 @@ const save_unreaded_message = require(__dirname + '/save_unreaded_message');
 const find_friend = require(__dirname + '/find_friend');
 const send_friend_request = require(__dirname + '/send_friend_request');
 const login = require(__dirname + '/login'); 
+const display_noti = require(__dirname + '/display_noti'); 
+const fetch_friend = require(__dirname + '/fetch_friend'); 
+
 
 
 app.use(bodyParser.json());
@@ -141,6 +144,39 @@ app.post("/accept_friend_request", (req, res) => {
     }); 
 
 });
+
+
+app.post("/display_noti", (req, res) => {
+    // pr(req.url);
+ 
+    display_noti(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
+
+});
+
+
+
+app.post("/fetch_friend", (req, res) => {
+    // pr(req.url);
+ 
+    fetch_friend(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
+
+});
+
+
+
+
 
 app.post("/save_readed_message", (req, res) => {
     // pr(req.url); 

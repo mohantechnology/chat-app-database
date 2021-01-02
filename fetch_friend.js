@@ -4,11 +4,9 @@ require('dotenv').config();
 const { json } = require('body-parser');
 const mongoose = require("mongoose");
 let link = process.env.DB_LINK;
-var json_data;
-var profile_schema;
-var model;
-// var document;
-// var conn_err;
+var user_detail_schema = require("./schema/user_detail");
+var profile_schema = require("./schema/profile");
+
 
 function pr(r1, r2, r3, r4) {
 
@@ -35,63 +33,61 @@ function connect_to_db() {
 
 }
 
-
-
-
-
-function create_schema_model() {
-
-    profile_schema = new mongoose.Schema({
-        friend_name: String,
-        friend_email: String,
-        chat_message: [],
-        recieved_message: [],
-        sent_message: [],
-        is_blocked: Boolean
-
-    });
-
-
-
-}
-
-async function fetch_friend() {
+async function fetch_friend( json_data) {
     // read all recived message from friends 
 
     // save message to your collection.chat_message 
-    pr("incoming data at fetch _profile ", json_data);
-    let model1 = mongoose.models[json_data.name] === undefined ? mongoose.model(json_data.name, profile_schema) : mongoose.model(json_data.name);
 
-    result = await model1.findOne({ friend_name: json_data.friend_name }, { recieved_message: 1 });
+
+    
+    let result1;
+
+
+    pr("incoming data at fetch _profile ", json_data);
+
+    //findOne user exist in user_detail
+
+    let model0 = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
+
+    // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+
+    result1 = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+    pr("reslut of model 0 is: ", result1);
+
+
+     
+
+
+    if (result1 == null || result1.account_status != "active") {
+        return { status: "error", message: "Not a valid user" }
+    }
+
+
+
+    let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.u_id);
+
+   let  result = await model1.findOne({ friend_u_id: json_data.friend_u_id }, { recieved_message: 1 });
     // result = JSON.stringify(result,null,4); 
     pr("result of find is: ",result);
 
     //transfer recived message to your chat message in your collection 
 
-    await model1.updateOne({ friend_name: json_data.friend_name }, { "$push": { chat_message: result.recieved_message } });
-    await model1.updateOne({ friend_name: json_data.friend_name }, { "$set": { recieved_message: [] } });
+    await model1.updateOne({ friend_u_id: json_data.friend_u_id }, { "$push": { chat_message: result.recieved_message } });
+    await model1.updateOne({ friend_u_id: json_data.friend_u_id }, { "$set": { recieved_message: [] } });
 
    // transfer friend  send  message to  friend chat message in  friend's collection 
-    let model2 = mongoose.models[json_data.friend_name] === undefined ? mongoose.model(json_data.friend_name, profile_schema) : mongoose.model(json_data.friend_name);
+    let model2 = mongoose.models[json_data.friend_u_id] === undefined ? mongoose.model(json_data.friend_u_id, profile_schema) : mongoose.model(json_data.friend_u_id);
 
-    let result_friend = await model2.findOne({ friend_name: json_data.name }, { sent_message: 1 })
-    await model2.updateOne({ friend_name: json_data.name }, { "$push": { chat_message: result_friend.sent_message } });
-    await model2.updateOne({ friend_name: json_data.name }, { "$set": { sent_message: [] } });
-
-
-
-    return { status: "ok", recieved_message: result.recieved_message };
+    let result_friend = await model2.findOne({ friend_u_id: json_data.u_id }, { sent_message: 1 })
+    await model2.updateOne({ friend_u_id: json_data.u_id }, { "$push": { chat_message: result_friend.sent_message } });
+    await model2.updateOne({ friend_u_id: json_data.u_id }, { "$set": { sent_message: [] } });
 
 
+     pr("final respose ",)
+    return { status: "ok", data: result.recieved_message };
 
-    //   pr("result of find is: ",{ status:"ok", recieved_message:  result.recieved_message}); 
 
 
-    // for(let i =0; i<len; i++ ){
-    // //    console.log(result[i].friend_name, " send you ",result[i].recieved_message.length); 
-    // response.data[ result[i].friend_name ] = result[i].recieved_message.length;
-    // // response.count = 
-    // }
 
 }
 
@@ -103,11 +99,10 @@ async function fetch_friend() {
 async function main(data) {
     connect_to_db();
     let result;
-    json_data = data;
-    create_schema_model();
 
 
-    result = await fetch_friend();
+
+    result = await fetch_friend(data);
     mongoose.connection.close();
     return result;
 }

@@ -74,60 +74,10 @@ async function display_noti(json_data) {
         return { status: "error", message: "Not a valid user" }
     }
 
-
- //those whom  request are already sended  add them in  table 
- let  sended_request = JSON.parse( JSON.stringify(result.sended_request)); 
- pr("list of sended_request  ",sended_request);
- for(let i=0; i<sended_request.length; i++){
-        table[sended_request[i].sended_id] =true; 
- }
- 
-//already friends
- let  friend_list = JSON.parse( JSON.stringify(result.friend_list)); 
-  
- 
- for(let i=0; i<friend_list.length; i++){
-    table_friend[friend_list[i].sended_id] =true; 
- }
- 
-pr("list of alread sended request ",table); 
-pr("list of friend ",table_friend); 
-
-    // console.log(mongoose.models);
-    // > db.test.find( { sku: { $regex: /dz/,"$options":"" } } );
-    let search_exp = RegExp(json_data.search_value, "i");
-    // pr("regex parrten is: ',", search_exp);
-    result = await model0.find({ $and: [{ name: { $regex: search_exp } }, { account_type: "public" }] } ,{_id:0,name:1,p_id:1});
-    pr("result is: ", result);
-  
-
-
-
-
-     result = JSON.parse( JSON.stringify(result)); 
-     let response = []; 
-    pr("inital result is: ",result); 
-//remove self id and then seperate sended and unsended user
-    for(let i=0; i<result.length; i++){
-
-        if(result[i].p_id!= json_data.p_id){
-            if( table[result[i].p_id]){
-                result[i].p_id=0; //request already sended 
-              
-              console.log( table[result[i].p_id]  + "already sended message ")
-            }
-            else if(table_friend[result[i].p_id]){
-                continue;   //those who are friend not include them 
-            }
-                result[i]["img"]="racoon.jpg"; 
-        result[i]["pro_mess"]="Hello there I am using this Chat app"; 
-        response.push(result[i])
-        }
-    
-    }
-
-    pr("final response is : ") ; 
-    return {status:"ok",list:response} ;
+//read notification from user details and return 
+ let  notification = JSON.parse( JSON.stringify(result.notification)); 
+  pr("notifcaiton is; ",notification)
+    return {status:"ok", data:notification} ;
 
 
 }

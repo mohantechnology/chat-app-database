@@ -146,7 +146,7 @@ let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
                  is_blocked:false
              })
             try {
-                pr("documetn is: ", document1);
+                // pr("documetn is: ", document1);
                 result = await document1.save();
 
                 console.log("result of save is; ");
@@ -190,7 +190,7 @@ let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
                  is_blocked:false
              })
             try {
-                pr("documetn is: ", document2);
+                // pr("documetn is: ", document2);
                 result = await document2.save();
 
                 console.log("result of save is; ",);
@@ -212,7 +212,7 @@ let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
     
   let result_last = await model0.findOne({u_id:json_data.u_id}  );
   
-  pr("----finding of result5 is: ",result_last); 
+//   pr("----finding of result_last is: ",result_last); 
   return {status:"ok",data:result_last.friend_request}; 
 
 
