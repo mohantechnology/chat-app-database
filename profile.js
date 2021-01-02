@@ -67,28 +67,29 @@ async function fetch_profile_data(json_data) {
       }
     //   await   model0.updateOne({email: json_data.email,u_id:json_data.u_id});
     //  #todo 
-    // read all recived message from friends 
 
-    // save message to your collection.chat_message 
+
       let user_name=result.name; 
 
 
     console.log(mongoose.models);  
     let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.u_id);
-     pr("after model reigstration ",mongoose.models); 
+    //  pr("after model reigstration ",mongoose.models); 
   
     
 
-
-    result = await  model1.findOne({},{name:1,friend_name:1,_id:0,recieved_message:1,u_id:1 }) ; 
+    //find profile in collection 
+    result = await  model1.find() ; 
     if(result){
-           pr("result of findOne is: ",result); 
+        //    pr("result of  of find is: is: ----------",result ,"00000000000000000"); 
     let i,len= result.length; 
     let response = {data : []};
     
+
+    
     for(let i =0; i<len; i++ ){
     //    console.log(result[i].friend_name, " send you ",result[i].recieved_message.length); 
-    response.data.push( { name: result[i].friend_name , count: result[i].recieved_message.length, img: "racoon.jpg" ,u_id:result[i].u_id});
+    response.data.push( { name: result[i].friend_name , count: result[i].recieved_message.length, img: "racoon.jpg" ,u_id:result[i].friend_u_id});
      
     // response.count = 
     }
@@ -127,4 +128,14 @@ async function main(data) {
 //     pr("error from main ", error);
 // });
 module.exports = main;
+
+
+
+
+
+
+
+
+
+
 

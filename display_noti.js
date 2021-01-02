@@ -49,14 +49,13 @@ function connect_to_db() {
 
 
 
-async function fetch_friend_list(json_data) {
+async function display_noti(json_data) {
 
 
     let result;
-    let table = {}; //do not again send the request to them  
-    let table_friend = {}; //those who are already in friend list  
 
-    // pr("incoming data at fetch _profile ", json_data);
+
+    pr("incoming data at fetch _profile ", json_data);
 
     //findOne user exist in user_detail
 
@@ -74,9 +73,7 @@ async function fetch_friend_list(json_data) {
     if (result == null || result.account_status != "active") {
         return { status: "error", message: "Not a valid user" }
     }
-    if (json_data.search_value == null || json_data.search_value == undefined || json_data.search_value == "") {
-        return { status: "error", message: "serching keywords required" }
-    }
+
 
  //those whom  request are already sended  add them in  table 
  let  sended_request = JSON.parse( JSON.stringify(result.sended_request)); 
@@ -88,20 +85,20 @@ async function fetch_friend_list(json_data) {
 //already friends
  let  friend_list = JSON.parse( JSON.stringify(result.friend_list)); 
   
-//  pr("$$$$$$$$$$friend_list ",friend_list); 
+ 
  for(let i=0; i<friend_list.length; i++){
-    table_friend[friend_list[i].sender_p_id] =true; 
+    table_friend[friend_list[i].sended_id] =true; 
  }
  
-// pr("list of alread sended request ",table); 
-// pr("list of friend ",table_friend); 
+pr("list of alread sended request ",table); 
+pr("list of friend ",table_friend); 
 
     // console.log(mongoose.models);
     // > db.test.find( { sku: { $regex: /dz/,"$options":"" } } );
     let search_exp = RegExp(json_data.search_value, "i");
     // pr("regex parrten is: ',", search_exp);
     result = await model0.find({ $and: [{ name: { $regex: search_exp } }, { account_type: "public" }] } ,{_id:0,name:1,p_id:1});
-    // pr("result is: ", result);
+    pr("result is: ", result);
   
 
 
@@ -109,7 +106,7 @@ async function fetch_friend_list(json_data) {
 
      result = JSON.parse( JSON.stringify(result)); 
      let response = []; 
-    // pr("inital result is: ",result); 
+    pr("inital result is: ",result); 
 //remove self id and then seperate sended and unsended user
     for(let i=0; i<result.length; i++){
 
@@ -143,7 +140,7 @@ async function fetch_friend_list(json_data) {
 async function main(data) {
     connect_to_db();
     let result;
-    result = await fetch_friend_list(data);
+    result = await display_noti(data);
     mongoose.connection.close();
     return result;
 }

@@ -5,7 +5,7 @@ const { json } = require('express');
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
     var profile_schema  =  require("./schema/profile");
-
+    var user_detail_schema = require("./schema/user_detail");
     // var document;
     // var conn_err;
 
@@ -64,7 +64,66 @@ const { json } = require('express');
     async function add_to_friend_list(json_data) {
        
 
-     //add yourself to your friend collection
+       let result; 
+        let result2; 
+        let model0 = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
+
+        // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+    
+        result = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+        pr("reslut of model 0 is checking: ", result);
+    
+    
+         
+    
+    
+        if (result == null || result.account_status != "active") {
+            return { status: "error", message: "Not a valid user" }
+        }
+    
+       //find u_id of sender 
+ if(json_data.signal==1){
+   result2 = await model0.findOne({p_id: json_data.friend_p_id });
+        pr("reslut of model 0 is: ", result);
+
+    if(!result2){
+        return {status: "error",message:"Friend Not Exists"}; 
+    }
+    json_data.friend_u_id = result2.u_id; 
+ //notify friend that you have accepted request 
+  let result3 = await model0.updateOne({u_id:result2.u_id} , {$push:{
+      notification: {message: json_data.name + " Accepted your Friend Request ",
+      "current_time":json_data.time,
+      img:result.img,
+      pro_mess:result.pro_mess,
+      "date":json_data.date,
+      direction:"ser"
+        
+    }
+        
+  }} ); 
+  // pull that friend from request list ;
+//   /pz9010673a097de53c9811
+
+  let result4 = await model0.updateOne({u_id:json_data.u_id} , {"$pull":{
+    friend_request: { sender_p_id:json_data.friend_p_id}}     } ); 
+
+pr("result 4 is: ",result4); 
+pr("result2 is: ",result2) ; 
+//add sender p_id to your friendlist [p_id]
+let result5 = await model0.updateOne({u_id:json_data.u_id} , {"$push":{
+    friend_list: { sender_p_id:json_data.friend_p_id}}     } ); 
+// also add to friend list[ p_id]
+
+let result6 = await model0.updateOne({u_id:result2.u_id} , {"$push":{
+    friend_list: { sender_p_id:json_data.p_id}}     } ); 
+// also remove from friend's  sender request ; 
+let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
+    sended_request: { sender_p_id:json_data.p_id}}     } ); 
+  
+  
+  
+    //add yourself to your friend collection
      let model1  = mongoose.models[json_data.friend_u_id]  === undefined ?  mongoose.model (json_data.friend_u_id,profile_schema) :  mongoose.model (json_data.friend_u_id);
 
 
@@ -106,7 +165,7 @@ const { json } = require('express');
         }
         else {
 
-            return{ status: "ok", message:  "Already  added to friend list "};
+            // return{ status: "ok", message:  "Already  added to friend list "};
         }
 
 
@@ -120,9 +179,9 @@ const { json } = require('express');
 
            let   document2 = new model2 ( {
                  friend_u_id:json_data.friend_u_id,
-                 friend_name:json_data.friend_name,
+                 friend_name:result2.name,
                  chat_message:  [
-                    {message: json_data.friend_name + "Now  Added as your Friend ",
+                    {message: result2.name + " Now  Added as your Friend ",
                      "current_time":json_data.time,
                      "date":json_data.date,
                      direction:"ser"
@@ -136,7 +195,7 @@ const { json } = require('express');
 
                 console.log("result of save is; ",);
 
-               return{ status: "ok", message:  "Successfully added to friend list"};
+            //    return{ status: "ok", message:  "Successfully added to friend list"};
             } catch (error) {
 
                 console.log((error))
@@ -146,11 +205,18 @@ const { json } = require('express');
 
             //
         
-  
-
-
-
     }
+    //endif
+
+    //find all other request 
+    
+  let result_last = await model0.findOne({u_id:json_data.u_id}  );
+  
+  pr("----finding of result5 is: ",result_last); 
+  return {status:"ok",data:result_last.friend_request}; 
+
+
+  }
 
 
 
@@ -158,9 +224,7 @@ const { json } = require('express');
     async function main(data) {
         connect_to_db();
         let result;
-     
-    
-        
+       
         result = await add_to_friend_list(data);
         mongoose.connection.close();
         return result;

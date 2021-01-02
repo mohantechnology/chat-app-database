@@ -132,7 +132,7 @@ app.post("/send_friend_request", (req, res) => {
 app.post("/accept_friend_request", (req, res) => {
     // pr(req.url);
  
-    accept_friend_request({ name:"mandingos", friend_name:"mohan", email:"mohan@gmail.com", friend_email: "mandingos@gmail.com "})
+    accept_friend_request(req.body)
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{ 
