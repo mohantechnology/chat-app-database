@@ -14,7 +14,7 @@ const send_friend_request = require(__dirname + '/send_friend_request');
 const login = require(__dirname + '/login'); 
 const display_noti = require(__dirname + '/display_noti'); 
 const fetch_friend = require(__dirname + '/fetch_friend'); 
-
+const check_user_details = require(__dirname + '/check_user_details'); 
 
 
 app.use(bodyParser.json());
@@ -177,6 +177,21 @@ app.post("/fetch_friend", (req, res) => {
 
 
 
+app.post("/check_user_details", (req, res) => {
+    // pr(req.url);
+ 
+    check_user_details(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
+
+});
+
+
+
 
 app.post("/save_readed_message", (req, res) => {
     // pr(req.url); 
@@ -204,6 +219,10 @@ app.post("/save_unreaded_message", (req, res) => {
 
 });
 
+app.post("*",(req,res)=>{
+ res.status(404).send({status:"error",message:"page not found"}); 
+ 
+}); 
 app.listen(port, () => {
     console.log("listening to port " + port);
 })
