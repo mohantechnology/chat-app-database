@@ -192,12 +192,12 @@ app.post("/check_user_details", (req, res) => {
 
 
 
-
+ 
 app.post("/save_readed_message", (req, res) => {
     // pr(req.url); 
 
 
-    save_readed_message({ name:"mandingos", friend_name:"mohan", message:"hello how are yoy mohan?" })
+    save_readed_message(req.body)
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{
@@ -210,7 +210,7 @@ app.post("/save_unreaded_message", (req, res) => {
     // pr(req.url); 
 
 
-    save_unreaded_message({ name:"mandingos", friend_name:"mohan", message:"mandingos send message to mohan?" })
+    save_unreaded_message(req.body)
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{

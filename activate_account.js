@@ -4,7 +4,7 @@
     const mongoose = require("mongoose");
     var link = process.env.DB_LINK; 
     var user_detail_schema = require("./schema/user_detail");
-
+    var profile_schema  =  require("./schema/profile");
 
 
 
@@ -61,9 +61,17 @@
                 pr("temp_data= ", temp_data);
 
                
-                return {status:"ok" , message:  "Account is Activated Successfully"};
+               
 
 
+
+
+
+        //  let model1   =  mongoose.models[result.u_id] === undefined ? mongoose.model(result.u_id,  profile_schema) : mongoose.model(result.u_id);
+          
+        //     result = await model1.updateOne({name:"ccx"},{age:20}); 
+        // pr("result of activate",result); 
+         return {status:"ok" , message:  "Account is Activated Successfully"};
             } catch (error) {
                 return {status:"error" , message:"something went wrong" } ;
             }
@@ -102,6 +110,8 @@
     //     pr("error from main ", error);
     // });
 
-    // http://localhost:3000/activate/goat@gmail.com/token_str/ad7ce0145fad538f1c5998f5f4c8cbbc2c28e2b8039fe823
-module.exports = main;
+    // http://localhost:3000/activate/s@gmail.com/token_str/f37733d840973f7ecbebe2af09a2519142466b4dc9886995
+
+
+    module.exports = main;
 

@@ -52,7 +52,7 @@ async function fetch_friend( json_data) {
     // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
 
     result1 = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
-    pr("reslut of model 0 is: ", result1);
+    // pr("reslut of model 0 is: ", result1);
 
 
      
@@ -66,12 +66,14 @@ async function fetch_friend( json_data) {
 
     let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.u_id);
 
-   let  result = await model1.findOne({ friend_u_id: json_data.friend_u_id }, { recieved_message: 1 });
+   let  result = await model1.findOne({ friend_u_id: json_data.friend_u_id }, { recieved_message: 1,chat_message:1 });
     // result = JSON.stringify(result,null,4); 
-    pr("result of find is: ",result);
+    // pr("result of find is: ",result);
 
     //transfer recived message to your chat message in your collection 
 
+
+  
     await model1.updateOne({ friend_u_id: json_data.friend_u_id }, { "$push": { chat_message: result.recieved_message } });
     await model1.updateOne({ friend_u_id: json_data.friend_u_id }, { "$set": { recieved_message: [] } });
 
@@ -83,8 +85,30 @@ async function fetch_friend( json_data) {
     await model2.updateOne({ friend_u_id: json_data.u_id }, { "$set": { sent_message: [] } });
 
 
-     pr("final respose ",)
-    return { status: "ok", data: result.recieved_message };
+//     let r_len =result.recieved_message.length?20-result.recieved_message.length:0 ; 
+//     let c_len = r_len<result.chat_message.length?r_len:result.chat_message.length;  
+//     let f_result = []; 
+//     pr("r_len ",r_len,"c_lne - ",c_len); 
+
+// let mess_list  = JSON.parse(JSON.stringify(  result.chat_message ))
+
+//     for(let i=result.chat_message.length-c_len; i<c_len; i++){
+//        f_result.push(mess_list[i]); 
+
+//     }
+    
+//     if(r_len!=20){
+
+//         f_result.push({date:json_data.date,time:json_data.time,message:"unreaded message ("+r_len + ")" ,direction:"ser"}); 
+//         for(let i=0; i<r_len; i++){
+//             f_result.push(result.recieved_message[i]); 
+//          }
+    
+
+
+//         }
+     pr("final respose ",f_result)
+    return { status: "ok", data:f_result };
 
 
 

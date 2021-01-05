@@ -3,7 +3,7 @@
     
     const mongoose = require("mongoose");
     let link = process.env.DB_LINK; 
-    var json_data;
+   
     var profile_schema  =  require("./schema/profile");
     // var document;
     // var conn_err;
@@ -40,7 +40,7 @@
 
     async function save_readed_message(json_data) {
         //i
-
+                //   pr("data at readed messa",json_data);
              ///save to  chat_message in  your collection
                 let model1  =  mongoose.models[json_data.u_id] === undefined ?  mongoose.model (json_data.u_id,profile_schema) :  mongoose.model (json_data.u_id); 
                 // pr("monosees schemaafirst -- are: '",mongoose.model[json_data.name] ); 
@@ -78,18 +78,13 @@
     }
 
 
-
+ 
     async function main(data) {
         connect_to_db();
-        let result;
-        try{
-           result = await save_readed_message(data);  
-        }catch(err){
-           mongoose.connection.close();
-            return {status: "error",message: "something went wrong "}
-        }
+        let result = await save_readed_message(data);  
+       
         mongoose.connection.close();
-        
+        // pr("save readed"); 
         return result;
     }
 
