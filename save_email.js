@@ -120,7 +120,7 @@ async function save_doc(json_data) {
             json_data.token_str = crypto.randomBytes(24).toString('hex');
             json_data.token_no = Math.round((Math.random() * 1000000)).toString();
       //******** TODO remove this to unactivate */
-        //    json_data.account_status = "active"; 
+           json_data.account_status = "active"; 
            json_data.account_type="public";
             document = new model(json_data);
             pr("documetn is: ", document);

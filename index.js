@@ -15,6 +15,7 @@ const login = require(__dirname + '/login');
 const display_noti = require(__dirname + '/display_noti'); 
 const fetch_friend = require(__dirname + '/fetch_friend'); 
 const check_user_details = require(__dirname + '/check_user_details'); 
+const offline_user = require(__dirname + '/offline_user'); 
 
 
 app.use(bodyParser.json());
@@ -191,6 +192,18 @@ app.post("/check_user_details", (req, res) => {
 });
 
 
+
+app.post("/offline_user", (req, res) => {
+  
+offline_user(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
+
+});
 
  
 app.post("/save_readed_message", (req, res) => {
