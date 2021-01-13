@@ -16,6 +16,7 @@ const display_noti = require(__dirname + '/display_noti');
 const fetch_friend = require(__dirname + '/fetch_friend'); 
 const check_user_details = require(__dirname + '/check_user_details'); 
 const offline_user = require(__dirname + '/offline_user'); 
+const update_prof = require(__dirname + '/update_prof'); 
 
 
 app.use(bodyParser.json());
@@ -160,6 +161,18 @@ app.post("/display_noti", (req, res) => {
 
 });
 
+app.post("/update_prof", (req, res) => {
+    // pr(req.url);
+ 
+    update_prof(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
+
+});
 
 
 app.post("/fetch_friend", (req, res) => {

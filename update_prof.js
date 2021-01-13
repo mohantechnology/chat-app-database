@@ -53,16 +53,16 @@ async function update_profile(json_data) {
     pr("incoming data at fetch _profile ", json_data);
 
 
-    let model0 = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
+    let model = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
 
     // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
-    //   result = await   model0.findOne({email: json_data.email, u_id:json_data.u_id,token:json_data.token});
-    result = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+    //   result = await   model.findOne({email: json_data.email, u_id:json_data.u_id,token:json_data.token});
+    result = await model.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
     // pr("reslut of model 0 is: ", result);
     if (result == null || result.account_status != "active") {
         return { status: "error", message: "Not a valid user" }
     }
-    //   await   model0.updateOne({email: json_data.email,u_id:json_data.u_id});
+    //   await   model.updateOne({email: json_data.email,u_id:json_data.u_id});
     //  #todo 
 
 
@@ -75,21 +75,33 @@ async function update_profile(json_data) {
          let new_name ; 
         let file_ext = path.extname(json_data.file_name)
         while (true) {
-            new_name =  + crypto.randomBytes(10).toString('hex') + file_ext;
+            new_name = "pi" + crypto.randomBytes(10).toString('hex') + file_ext;
          
-        
+         //
             result2  = await model.findOne({ profile_img:new_name });
             // pr("----- result2   of  ith iteration is is: -> ", result2 );
-            
+            //check if filename already exists 
             if (result2  == null) {
                 pr("breaking ")
                 break;
             }
         }
-      result2=  await model.updateOne({u_id:json_data.u_id},{ $set:{profile_img:new_name ,pro_mess:json_data.prof_mess,account_type:json_data.account_type}});
-    }else{
-        result2=  await model.updateOne({u_id:json_data.u_id},{ $set:{pro_mess:json_data.prof_mess,account_type:json_data.account_type}});
+    pr("new namw= "+ new_name)
+      result2=  await model.updateOne({u_id:json_data.u_id},{ $set:{profile_img:new_name ,pro_mess:json_data.pro_mess,account_type:json_data.account_type}});
+      if(result2.nModified==1){
+        return {status:"ok",curr_file_name: new_name ,prev_file_name:result.profile_img }
+   
     }
+    }else{
+        //only save update message and accouunt type 
+        result2=  await model.updateOne({u_id:json_data.u_id},{ $set:{pro_mess:json_data.pro_mess,account_type:json_data.account_type}});
+        if(result2.nModified==1){
+            return {status:"ok" }
+       
+        }
+    }
+
+
  pr("result2 = ",result2); 
  return {status:"ok",}
 
@@ -116,7 +128,8 @@ async function main(data) {
     mongoose.connection.close();
     return result;
 }
-s = main;
+
+module.exports = main;
 
 
 
