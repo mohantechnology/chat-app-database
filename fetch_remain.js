@@ -29,8 +29,8 @@ function pr(r1, r2, r3, r4) {
 
 
 function connect_to_db() {
-    mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
-
+ let temp =    mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
+pr ("********************",temp); 
 }
 
 async function fetch_remain( json_data) {
@@ -110,7 +110,7 @@ async function main(data) {
 
 
     result = await fetch_remain(data);
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 }
 
