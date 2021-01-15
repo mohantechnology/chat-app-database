@@ -120,12 +120,12 @@
 
 
 
-    main({ email: "maggi@gmail.com", name: "maggi", password: "123456" ,u_id:"cz483c8e7a8ffb75a7530e",friend_u_id:"czd73fb9342f6aaba3e400" ,time:"12:58",date: "12/28/2020" ,message:"****maa hoo magii ->tu haa mohan" }).then(data => {
-            pr("returned data  main is: ", data);
+    // main({ email: "maggi@gmail.com", name: "maggi", password: "123456" ,u_id:"cz483c8e7a8ffb75a7530e",friend_u_id:"czd73fb9342f6aaba3e400" ,time:"12:58",date: "12/28/2020" ,message:"****maa hoo magii ->tu haa mohan" }).then(data => {
+    //         pr("returned data  main is: ", data);
         
-        }).catch(error => {
-            pr("error from main ", error);
-        });
+    //     }).catch(error => {
+    //         pr("error from main ", error);
+    //     });
 
 
 module.exports = main;

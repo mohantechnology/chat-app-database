@@ -17,6 +17,8 @@ const fetch_friend = require(__dirname + '/fetch_friend');
 const check_user_details = require(__dirname + '/check_user_details'); 
 const offline_user = require(__dirname + '/offline_user'); 
 const update_prof = require(__dirname + '/update_prof'); 
+const fetch_remain = require(__dirname + '/fetch_remain'); 
+
 
 
 app.use(bodyParser.json());
@@ -189,7 +191,18 @@ app.post("/fetch_friend", (req, res) => {
 });
 
 
+app.post("/fetch_remain", (req, res) => {
+    // pr(req.url);
+ 
+    fetch_remain(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
 
+});
 
 app.post("/check_user_details", (req, res) => {
     // pr(req.url);

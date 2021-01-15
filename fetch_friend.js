@@ -88,7 +88,7 @@ async function fetch_friend( json_data) {
     await model2.updateOne({ friend_u_id: json_data.u_id }, { "$set": { sent_message: [] } });
     }
   if(!result){
-      return {status:"ok" ,data:[]}; 
+      return {status:"ok" ,data:[],no:0}; 
   }
     let r_len =result.recieved_message.length?20-result.recieved_message.length:20; 
     let c_len = result.chat_message.length>r_len?r_len:result.chat_message.length
@@ -114,7 +114,7 @@ async function fetch_friend( json_data) {
         }
     //  pr("final respose ",); 
     //  pr("r_len ",r_len); 
-    return { status: "ok", data:f_result,name:result2.name,current_status:result2.current_status,img:result2.img};
+    return { status: "ok", data:f_result,name:result2.name,current_status:result2.current_status,img:result2.img,no:result.chat_message.length-c_len};
 
 
 
