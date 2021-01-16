@@ -33,8 +33,8 @@ function pr(r1, r2,r3,r4) {if(r1){console.log(r1)}if(r2){console.log(r2)}if(r3){
 
 app.get("/",(req, res) => {
 //    res.send(req.body); 
-    // console.log("url is |\n",req.url); 
-    // console.log(req.body); 
+    console.log("url is |\n",req.url); 
+    console.log(req.body); 
          res.json({"message":" sucessfully connected to api  using GET  "}); 
     }); 
     app.post("/", (req, res) => {
