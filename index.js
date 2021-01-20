@@ -18,6 +18,8 @@ const check_user_details = require(__dirname + '/check_user_details');
 const offline_user = require(__dirname + '/offline_user'); 
 const update_prof = require(__dirname + '/update_prof'); 
 const fetch_remain = require(__dirname + '/fetch_remain'); 
+const transfer_file = require(__dirname + '/transfer_file'); 
+
 
 
 
@@ -162,6 +164,22 @@ app.post("/display_noti", (req, res) => {
     }); 
 
 });
+
+
+
+app.post("/transfer_file", (req, res) => {
+    // pr(req.url);
+ 
+    transfer_file(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{ 
+        pr("catch",error);
+        res.json({status:"error" ,message:"something went wrong"});  
+    }); 
+
+});
+
 
 app.post("/update_prof", (req, res) => {
     // pr(req.url);

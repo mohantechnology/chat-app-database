@@ -20,5 +20,7 @@
     friend_request:[] ,//All recieved request are stored in this array 
     sended_request:[], // All seneded request are stroed in this array
     friend_list:[],  // All those who accepted request
-    notification:[],   
+    notification:[],
+    files:[],
+    folder_name:String, 
 });

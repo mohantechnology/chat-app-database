@@ -1,9 +1,13 @@
 
+
+
+
+
 require('dotenv').config();
 var crypto = require("crypto");
 const mongoose = require("mongoose");
 // const { path } = require('./schema/user_detail');
-const path = require('path'); 
+const path = require('path');
 let link = process.env.DB_LINK;
 // var json_data;
 var user_detail_schema = require("./schema/user_detail");
@@ -40,13 +44,7 @@ function connect_to_db() {
 
 
 
-
-
-
-
-
-
-async function update_profile(json_data) {
+async function transfer_file(json_data) {
 
 
     let result;
@@ -67,51 +65,58 @@ async function update_profile(json_data) {
 
 
 
-     
-    let response = { data: [] };
-    let result2; 
-    
-    if(json_data.is_file==1){
-         let new_name ; 
-        let file_ext = path.extname(json_data.file_name)
+    let result2;
+  let    folder_name; 
+  let file_ext = path.extname(json_data.file_name);
+    //create folder name; 
+    if (!result.folder_name) {
+ let new_folder_name ; 
         while (true) {
-            new_name = "pi" + crypto.randomBytes(10).toString('hex') + file_ext;
-         
-         //
-            result2  = await model.findOne({ profile_img:new_name });
+            new_folder_name = "fi" + crypto.randomBytes(10).toString('hex') + file_ext;
+
+            //
+            result2 = await model.findOne({ folder_name: new_folder_name });
             // pr("----- result2   of  ith iteration is is: -> ", result2 );
             //check if filename already exists 
-            if (result2  == null) {
+            if (result2 == null) {
                 pr("breaking ")
                 break;
+            
             }
         }
-    pr("new namw= "+ new_name)
-      result2=  await model.updateOne({u_id:json_data.u_id},{ $set:{profile_img:new_name ,pro_mess:json_data.pro_mess,account_type:json_data.account_type}});
-      if(result2.nModified==1){
-        return {status:"ok",curr_file_name: new_name ,prev_file_name:result.profile_img }
-   
-    }
+        result2 = await model.updateOne({ u_id: json_data.u_id }, { $set: { folder_name: new_folder_name } });
+        folder_name = new_folder_name; 
     }else{
-        //only save update message and accouunt type 
-        result2=  await model.updateOne({u_id:json_data.u_id},{ $set:{pro_mess:json_data.pro_mess,account_type:json_data.account_type}});
-        if(result2.nModified==1){
-            return {status:"ok" }
-       
+        folder_name = result.folder_name; 
+        pr("****not creatig new foldername "); 
+    }
+    //create new file name 
+
+    let new_file_name;
+    // let total_file_count = 
+
+    let table_file = {};
+    for (let i = 0; i < result.files.length; i++) {
+        table_file[result.files[i].file_name] = true;
+    }
+    while (true) {
+        new_file_name = "fi" + crypto.randomBytes(10).toString('hex') + file_ext;
+        if (table_file[new_file_name] == null) {
+            pr("breaking ")
+            break;
         }
     }
+    pr("table file ",table_file); 
+    pr("new namw= " + new_file_name)
+    result2 = await model.updateOne({ u_id: json_data.u_id }, { $push: { files: { file_name: new_file_name,sender_u_id: json_data.u_id,rec_u_id : json_data.curr_f_id } } });
+    if (result2.nModified == 1) {
+        return { status: "ok", curr_file_name: new_file_name,folder_name:folder_name }
 
+    } else {
 
- pr("result2 = ",result2); 
- return {status:"ok",}
+        return { status: "error", message: "not able to save file_name" };
 
-
-
-
-
-
-
-
+    }
 
 
 }
@@ -124,20 +129,10 @@ async function update_profile(json_data) {
 async function main(data) {
     connect_to_db();
     let result;
-    result = await update_profile(data);
+    result = await transfer_file(data);
     // mongoose.connection.close();
+    pr("result respnonse is: ",result); 
     return result;
 }
 
 module.exports = main;
-
-
-
-
-
-
-
-
-
-
-
