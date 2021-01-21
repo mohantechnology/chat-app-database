@@ -81,7 +81,7 @@ async function fetch_profile_data(json_data) {
     pr("f_list p_id ", f_list_p_id); 
     let friend_result =   await model0.find({p_id:{$in:f_list_p_id}},{name:1,profile_img:1,pro_mess:1,u_id:1}); 
 
-       pr("friend_result ",friend_result);
+    //    pr("friend_result ",friend_result);
        
 
      //map friend_u_id -> detail   
@@ -89,7 +89,7 @@ async function fetch_profile_data(json_data) {
     for(let  i =0; i<friend_result.length; i++){
         table_friend_uid_to_detail[friend_result[i].u_id] = friend_result[i]; 
     }
-    pr("talbie is: ",table_friend_uid_to_detail);  
+    // pr("talbie is: ",table_friend_uid_to_detail);  
     let response = { data: [] ,account_type:result.account_type  };
     response.name = result.name;
     response.img = result.profile_img;
@@ -108,7 +108,7 @@ async function fetch_profile_data(json_data) {
         let i, len = result_profile.length;
       for (let i = 0; i < len; i++) {
             //    console.log(result[i].friend_name, " send you ",result[i].recieved_message.length); 
-pr("i="+ i,result_profile[i]); 
+// pr("i="+ i,result_profile[i]); 
             response.data.push({ name: result_profile[i].friend_name,
                  count: result_profile[i].recieved_message.length,
                  img:table_friend_uid_to_detail[result_profile[i].friend_u_id].profile_img ,
@@ -124,7 +124,7 @@ pr("i="+ i,result_profile[i]);
 
     response.status = "ok"; 
     
-    pr("Final respose at profile ",response); 
+    // pr("Final respose at profile ",response); 
     return response;
     // result = JSON.stringify(result,null,4); 
 

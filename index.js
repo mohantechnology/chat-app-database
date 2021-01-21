@@ -8,6 +8,8 @@ const activate_account = require(__dirname + '/activate_account');
 const profile = require(__dirname + '/profile'); 
 const accept_friend_request = require(__dirname + '/accept_friend_request'); 
 const save_readed_message = require(__dirname + '/save_readed_message');
+const save_readed_file = require(__dirname + '/save_readed_file');
+const save_unreaded_file = require(__dirname + '/save_unreaded_file');
 const save_unreaded_message = require(__dirname + '/save_unreaded_message');
 const find_friend = require(__dirname + '/find_friend');
 const send_friend_request = require(__dirname + '/send_friend_request');
@@ -268,6 +270,35 @@ app.post("/save_unreaded_message", (req, res) => {
 
 
     save_unreaded_message(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{
+        pr("catch",error); 
+    }); 
+
+});
+
+
+
+
+app.post("/save_readed_file", (req, res) => {
+    // pr(req.url); 
+
+
+    save_readed_file(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{
+        pr("catch",error); 
+    }); 
+
+});
+
+app.post("/save_unreaded_file", (req, res) => {
+    // pr(req.url); 
+
+ 
+    save_unreaded_file(req.body)
     .then(data=>{     
         res.send(data);  
     }).catch(error=>{

@@ -102,15 +102,16 @@ async function transfer_file(json_data) {
     while (true) {
         new_file_name = "fi" + crypto.randomBytes(10).toString('hex') + file_ext;
         if (table_file[new_file_name] == null) {
-            pr("breaking ")
+            // pr("breaking ")
             break;
         }
     }
-    pr("table file ",table_file); 
+    
+    // pr("table file ",table_file); 
     pr("new namw= " + new_file_name)
-    result2 = await model.updateOne({ u_id: json_data.u_id }, { $push: { files: { file_name: new_file_name,sender_u_id: json_data.u_id,rec_u_id : json_data.curr_f_id } } });
+    result2 = await model.updateOne({ u_id: json_data.u_id }, { $push: { files: { file_name: json_data.file_name,new_file_name: new_file_name,sender_u_id: json_data.u_id,rec_u_id : json_data.curr_f_id } } });
     if (result2.nModified == 1) {
-        return { status: "ok", curr_file_name: new_file_name,folder_name:folder_name }
+        return { status: "ok", file_name: json_data.file_name, curr_file_name: new_file_name,folder_name:folder_name }
 
     } else {
 
