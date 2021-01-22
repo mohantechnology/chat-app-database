@@ -53,7 +53,9 @@
                                                     direction:"out",
                                                     mess_type:"file",
                                                     file_name: json_data.file_name,
-                                                    file_link: json_data.file_link
+                                                    file_link: json_data.file_link,
+                                                    mime_type: json_data.mime_type,
+                                                    folder_name:json_data.folder_name
                                                }}}); 
                                     
                 pr("result sent_message is: '",result); 
@@ -72,7 +74,9 @@
                     direction:"in",
                     mess_type:"file",
                     file_name: json_data.file_name,
-                    file_link: json_data.file_link
+                    file_link: json_data.file_link,
+                    mime_type: json_data.mime_type,
+                    folder_name:json_data.folder_name
                }}});
 
                if(result== null || result.nModified == 0){

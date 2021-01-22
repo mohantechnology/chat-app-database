@@ -66,7 +66,7 @@ async function fetch_friend( json_data) {
 
     let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.u_id);
 
-   let  result = await model1.findOne({ friend_u_id: json_data.friend_u_id }, { recieved_message: 1,chat_message:1 });
+   let  result = await model1.findOne({ friend_u_id: json_data.friend_u_id }, { recieved_message: 1,chat_message:1,sent_message:1 });
     // result = JSON.stringify(result,null,4); 
     // pr("result of find is: ",result);
 
@@ -112,6 +112,10 @@ async function fetch_friend( json_data) {
 
 
         }
+        for(let i=0; i<result.sent_message.length; i++){
+            f_result.push(result.sent_message[i]); 
+         }
+    
     //  pr("final respose ",); 
     //  pr("r_len ",r_len); 
     return { status: "ok", data:f_result,name:result2.name,current_status:result2.current_status,img:result2.img,no:result.chat_message.length-c_len};
