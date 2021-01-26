@@ -92,6 +92,7 @@
     async function main(data) {
         connect_to_db();
         let result;
+        pr("activate account");
         // json_data = data; pr("json data is: ", json_data);
         // result = validate_and_trim_data(json_data);
         // if (!result) {
@@ -99,7 +100,7 @@
         //     return "missing data"
         // };
         result = await activate_account(data);
-        mongoose.connection.close();
+        // mongoose.connection.close();
         return result;
     }
 

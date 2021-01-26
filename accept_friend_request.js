@@ -96,6 +96,7 @@ const { json } = require('express');
       notification: {message: json_data.name + " Accepted your Friend Request ",
       "current_time":json_data.time,
       img:result.img,
+      sender_name:json_data.name ,
       pro_mess:result.pro_mess,
       "date":json_data.date,
       direction:"ser"

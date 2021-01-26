@@ -7,6 +7,7 @@ const validator = require("validator");
 var link = process.env.DB_LINK;
 var crypto = require("crypto");
 var user_detail_schema = require("./schema/user_detail");
+const { json } = require('body-parser');
 // var profile_schema  =  require("./schema/profile");
 
 function pr(r1, r2, r3, r4) {
@@ -78,7 +79,8 @@ async function save_doc(json_data) {
 
     // console.log("find result is  : ");
     console.log(result);
-    if (result == null) {
+    //##
+    if ( result == null) {
         //generate a random unique_id for collection name 
         let u_id; 
         // let count=2; 
@@ -119,8 +121,9 @@ async function save_doc(json_data) {
             json_data.p_id = p_id;
             json_data.token_str = crypto.randomBytes(24).toString('hex');
             json_data.token_no = Math.round((Math.random() * 1000000)).toString();
+
       //******** TODO remove this to unactivate */
-           json_data.account_status = "active"; 
+        //    json_data.account_status = "active"; 
            json_data.account_type="public";
             document = new model(json_data);
             pr("documetn is: ", document);
@@ -130,7 +133,7 @@ async function save_doc(json_data) {
             console.log("result of save is; ");
 
 
-            return {status:"ok",message: "Acount Registered Successfully"}; 
+            return {status:"ok",message: "Acount Registered Successfully", token_str:json_data.token_str, token_no: json_data.token_no,email: json_data.email}; 
         } catch (error) {
 
             return {status:"error",message: "something went wrong "}; 
@@ -139,7 +142,7 @@ async function save_doc(json_data) {
     }
     else {
 
-        return {status:"ok",message: "Email already Exists"};
+        return {status:"error",message: "Email already Exists"};
     }
 
 

@@ -11,7 +11,8 @@
     token_no: String, // account activation number 
     token:String,          //temporary token given to user every time changed during login 
      p_id: String, //public id  used for sending friend request
-    expire_time: String,
+    expire_time: Number,
+    resend_time:Number, 
     account_status: String,   //account is active or not 
     current_status: String,// currently online or not 
     account_type:String, //account type can be  public or private(not shown when other search for it )
@@ -22,5 +23,6 @@
     friend_list:[],  // All those who accepted request
     notification:[],
     files:[],
+       
     folder_name:String, 
 });
