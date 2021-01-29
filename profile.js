@@ -65,12 +65,7 @@ async function fetch_profile_data(json_data) {
     if (result == null || result.account_status != "active") {
         return { status: "error", message: "Not a valid user" }
     }
-    //   await   model0.updateOne({email: json_data.email,u_id:json_data.u_id});
-    //  #todo 
-  
-
-
-
+   
 
 
     // let sender_arr = 

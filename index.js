@@ -22,6 +22,10 @@ const update_prof = require(__dirname + '/update_prof');
 const fetch_remain = require(__dirname + '/fetch_remain'); 
 const transfer_file = require(__dirname + '/transfer_file'); 
 
+const forgot_pass = require(__dirname + '/forgot_pass'); 
+const new_pass = require(__dirname + '/new_pass'); 
+const ver_reset_pass = require(__dirname + '/ver_reset_pass'); 
+
 
 
 
@@ -306,6 +310,54 @@ app.post("/save_unreaded_file", (req, res) => {
     }); 
 
 });
+
+app.post("/forgot_pass", (req, res) => {
+    // pr(req.url); 
+
+ 
+    forgot_pass(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{
+        pr("catch",error); 
+    }); 
+
+});
+
+
+app.post("/new_pass", (req, res) => {
+    // pr(req.url); 
+
+ 
+    new_pass(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{
+        pr("catch",error); 
+    }); 
+
+});
+
+
+
+app.post("/ver_reset_pass", (req, res) => {
+    // pr(req.url); 
+
+ 
+    ver_reset_pass(req.body)
+    .then(data=>{     
+        res.send(data);  
+    }).catch(error=>{
+        pr("catch",error); 
+    }); 
+
+});
+
+
+
+
+
+
 
 app.post("*",(req,res)=>{
  res.status(404).send({status:"error",message:"page not found"}); 
