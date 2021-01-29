@@ -83,7 +83,7 @@ async function create_token(json_data) {
 
          let    result2 = await model.updateOne({ u_id: result.u_id , email: json_data.email},{token_str:token_string,token_no:token_num,expire_time:Date.now() +     600000});
 
-            console.log(result2,{token_str:token_string,token_no:token_num,expire_time:Date.now() +     600000});
+     
             if(result2.nModified== 1){
                 return  {status:"ok", token_str: token_string,email:json_data.email,token_no:token_num }
             }else{

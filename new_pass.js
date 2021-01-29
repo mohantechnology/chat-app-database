@@ -40,12 +40,12 @@ function connect_to_db() {
 
 function is_validate_data(json_data) {
 
-    if((!json_data)|| (!(json_data.email)) || (!json_data.new_pass) ){
+    if((!json_data)|| (!(json_data.email)) || (!json_data.password) ){
         return { status:"error" , message:"missing data "};
     }
     json_data.email =  json_data.email.trim();
-    json_data.new_pass = json_data.new_pass.trim() 
-    if(json_data.email=="" || json_data.new_pass ==""){
+    json_data.password = json_data.password.trim() 
+    if(json_data.email=="" || json_data.password ==""){
         return { status:"error" , message:"missing data "};
     }
     else if (!validator.isEmail(json_data.email)) {
@@ -75,9 +75,13 @@ async function insert_new_password(json_data) {
         pr("string called ",result);
     }
     pr("result is: ",result); 
-    if (result) {
+    if (result ) {
         
-        let result2 = await model.updateOne({ email: json_data.email, token_str: json_data.token_str },{"$set":{token_str: crypto.randomBytes(25).toString('hex'),token_no:Math.round((Math.random() * 1000000)).toString()}});
+         if(result.expire_time <Date.now()){
+            return {status:"error" , message:"Link Expired" } ;
+         }
+
+        let result2 = await model.updateOne({ email: json_data.email, token_str: json_data.token_str },{"$set":{token_str: crypto.randomBytes(25).toString('hex'),token_no:Math.round((Math.random() * 1000000)).toString(),password:json_data.password}});
         if(result2){
             return {status:"ok" , message:  "Successfully Update your Password"};
         }else{
@@ -100,7 +104,7 @@ async function insert_new_password(json_data) {
 
 async function main(data) {
     connect_to_db();
-
+     pr("data at new pass ",data); 
       let result  = is_validate_data(data); 
     if (result.status=="error") { return result; }
 

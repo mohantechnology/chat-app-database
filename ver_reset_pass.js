@@ -76,8 +76,11 @@ async function verify_reset_pass_token(json_data) {
     }
     pr("result is->: ",result); 
     if (result) {
-       
-     return {status:"ok" , message:  "verfied email successfully",token_no: result.token_no,token_str:result.token_str};
+          
+        if(result.expire_time <Date.now()){
+            return {status:"error" , message:"Link Expired" } ;
+         }
+     return {status:"ok" , message:  "verfied email successfully",token_no: result.token_no,token_str:result.token_str,email:result.email};
         //
     }
     else {

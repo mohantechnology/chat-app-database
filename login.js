@@ -68,7 +68,7 @@
                         return {name:result.name,email:result.email,status:"ok" ,token:temp_id ,u_id:result.u_id ,p_id:result.p_id}; 
                     }
                     else{
-                        return {status:"error" ,message:"Account Not Registered "}; 
+                        return {status:"error" ,message:"Invalid Login Credentials"}; 
                     }
     }
 

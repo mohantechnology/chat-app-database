@@ -62,10 +62,12 @@ async function fetch_profile_data(json_data) {
     //   result = await   model0.findOne({email: json_data.email, u_id:json_data.u_id,token:json_data.token});
     result = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
     pr("reslut of model 0 is: ", result);
-    if (result == null || result.account_status != "active") {
-        return { status: "error", message: "Not a valid user" }
+    if (result == null ) {
+        return { status: "error", message: "Not a valid user" };
     }
-   
+   if( result.account_status != "active"){
+    return { status: "error", message: "Account is Not Activated" };
+   }
 
 
     // let sender_arr = 
