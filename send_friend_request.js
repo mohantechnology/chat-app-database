@@ -97,7 +97,7 @@ if(result1.nModified==0){
 let friend_result =  await   model0.updateOne({p_id:json_data.friend_p_id},{$push:{friend_request:{ 
     sender_name:result.name,
     sender_pro_mess:result.pro_mess,
-    sender_img : result.img,
+    sender_img : result.profile_img,
     sender_p_id:result.p_id,
     data:json_data.date,
     time:json_data.time

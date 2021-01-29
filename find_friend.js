@@ -100,7 +100,7 @@ async function fetch_friend_list(json_data) {
     // > db.test.find( { sku: { $regex: /dz/,"$options":"" } } );
     let search_exp = RegExp(json_data.search_value, "i");
     // pr("regex parrten is: ',", search_exp);
-    result = await model0.find({ $and: [{ name: { $regex: search_exp } }, { account_type: "public" }] } ,{_id:0,name:1,p_id:1});
+    result = await model0.find({ $and: [{ name: { $regex: search_exp } }, { account_type: "public" }] } ,{_id:0,name:1,p_id:1,profile_img:1,pro_mess:1});
     // pr("result is: ", result);
   
 
@@ -122,8 +122,8 @@ async function fetch_friend_list(json_data) {
             else if(table_friend[result[i].p_id]){
                 continue;   //those who are friend not include them 
             }
-                result[i]["img"]="racoon.jpg"; 
-        result[i]["pro_mess"]="Hello there I am using this Chat app"; 
+        //         result[i]["img"]="racoon.jpg"; 
+        // result[i]["pro_mess"]="Hello there I am using this Chat app"; 
         response.push(result[i])
         }
     

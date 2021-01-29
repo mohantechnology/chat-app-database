@@ -95,7 +95,7 @@ const { json } = require('express');
   let result3 = await model0.updateOne({u_id:result2.u_id} , {$push:{
       notification: {message: json_data.name + " Accepted your Friend Request ",
       "current_time":json_data.time,
-      img:result.img,
+      img:result.profile_img,
       sender_name:json_data.name ,
       pro_mess:result.pro_mess,
       "date":json_data.date,
