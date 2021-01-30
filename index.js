@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require('body-parser')
 const app = express(); 
 const port = process.env.PORT || 9000;
-const save_email = require(__dirname + '/save_email');
+const register = require(__dirname + '/register');
 const activate_account = require(__dirname + '/activate_account');
 const profile = require(__dirname + '/profile'); 
 const accept_friend_request = require(__dirname + '/accept_friend_request'); 
@@ -54,7 +54,7 @@ app.get("/",(req, res) => {
 app.post("/register", (req, res) => {
    
     pr("incoming data ",req.body); 
-    save_email(req.body).
+    register(req.body).
     then(data=>{
         // pr("then " ,data);
         res.json(data);  

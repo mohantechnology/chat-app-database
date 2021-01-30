@@ -41,9 +41,9 @@ function is_validate_data(json_data) {
     if (!validator.isEmail(json_data.email)) {
         return { status:"error" , message:"Enter  a valid email"};
     }
-    else if (json_data.name.length == 0) {
-        return { status:"error" , message:"Enter   a valid name"};
-
+    else if (! json_data.password ) {
+        return { status:"error" , message:"Enter Your Password"};
+    
     }
     else if (json_data.password.length < 6) {
         return { status:"error" , message:"Password  Must be Greater than or equal to 6 charcters"};
@@ -54,14 +54,14 @@ function is_validate_data(json_data) {
 
 
 function trim_data(json_data) {
-    if (json_data.email && json_data.name && json_data.password && json_data.conform_password) {
+    if (json_data.email  && json_data.password ) {
         json_data.email = json_data.email.trim();
-        json_data.name = json_data.name.trim();
+
         json_data.password = json_data.password.trim();
     } else {
         return { status:"error" , message:"All Fields are Required"};
     }
-    if (json_data.email == "" || json_data.name == "" || json_data.password == "" ||   json_data.conform_password =="" ) {
+    if (json_data.email == "" ||  json_data.password == "" ) {
         return { status:"error" , message:"All Fields are Required"};
     } else {
         return json_data;
@@ -86,16 +86,14 @@ async function save_doc(json_data) {
         // let count=2; 
         while (true) {
             u_id = "cz"  + crypto.randomBytes(10).toString('hex');
-            // u_id = "thisifsnotuni";
-        
-            result = await model.findOne({ u_id: u_id });
+              result = await model.findOne({ u_id: u_id });
             // pr("----- result  of  ith iteration is is: -> ", result);
             
             if (result == null) {
                 pr("breaking ")
                 break;
             }
-        }
+        } 
         //generate unique public id for send friend request 
         let  p_id ; 
         while (true) {
@@ -141,6 +139,9 @@ async function save_doc(json_data) {
 
     }
     else {
+        if(json_data.email ==result.email && json_data.password == result.password){
+            return {status:"ok",message: "Resended Activation Link", token_str:result.token_str, token_no: result.token_no,email: result.email}; 
+        }
 
         return {status:"error",message: "Email already Exists"};
     }
@@ -157,18 +158,18 @@ async function main(data) {
     result = trim_data(data);
 
 
-    if (result.status=="error" ) { mongoose.connection.close(); return {status:"error",message: "missing data" }};
+    if (result.status=="error" ) { return {status:"error",message: "missing data" }};
 
 
     result = is_validate_data(data); pr("valid data", result);
 
-    if (result.status=="error") { mongoose.connection.close(); return result; }
+    if (result.status=="error") {  return result; }
 
 
 
     result = await save_doc(result);
     //  pr( "model userd_deait", mongoose.models); 
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 
 

@@ -30,7 +30,6 @@ function pr(r1, r2, r3, r4) {
 
 
 
-///***********make name or enter user name and original name  unique */
 
 function connect_to_db() {
     mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
