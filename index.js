@@ -101,7 +101,7 @@ app.post("/profile", (req, res) => {
 
     profile(req.body)
     .then(data=>{  
-       console.log(data); 
+    //    console.log(data); 
         res.json(data); ;  
     }).catch(error=>{
         pr("catch",error); 
@@ -118,7 +118,7 @@ app.post("/find_friend", (req, res) => {
 
     find_friend(req.body)
     .then(data=>{  
-       console.log(data); 
+    //    console.log(data); 
         res.json(data); ;  
     }).catch(error=>{
         pr("catch",error); 

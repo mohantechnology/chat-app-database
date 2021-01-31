@@ -228,7 +228,7 @@ let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
         let result;
        
         result = await add_to_friend_list(data);
-        mongoose.connection.close();
+        // mongoose.connection.close();
         return result;
     }
 

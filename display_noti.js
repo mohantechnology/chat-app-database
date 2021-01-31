@@ -91,7 +91,7 @@ async function main(data) {
     connect_to_db();
     let result;
     result = await display_noti(data);
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 }
 

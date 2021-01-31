@@ -122,7 +122,7 @@ async function main() {
   create_model(); 
   await   save_message(); 
 
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 
 

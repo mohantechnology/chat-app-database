@@ -84,11 +84,11 @@
         result = trim_data(data )
          
         if(!result){
-            mongoose.connection.close();
+            // mongoose.connection.close();
             return {status:"error",message:"missing data"}; 
         }
         result = await check_login_detail(result);
-        mongoose.connection.close();
+        // mongoose.connection.close();
         return result ; 
     }
 

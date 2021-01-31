@@ -74,6 +74,9 @@ async function fetch_friend( json_data) {
 
 
   if(result && result.recieved_message){
+
+
+
       await model1.updateOne({ friend_u_id: json_data.friend_u_id }, { "$push": { chat_message: result.recieved_message } });
       await model1.updateOne({ friend_u_id: json_data.friend_u_id }, { "$set": { recieved_message: [] } });
 
@@ -90,19 +93,38 @@ async function fetch_friend( json_data) {
   if(!result){
       return {status:"ok" ,data:[],no:0}; 
   }
-    let r_len =result.recieved_message.length?20-result.recieved_message.length:20; 
-    let c_len = result.chat_message.length>r_len?r_len:result.chat_message.length
+
+
+ pr(result.recieved_message)
+      //check if user hass seen this recieved message **
+    // let unreaded_rec_len =0 ;
+    // console.log("going to loop  at a= ",unreaded_rec_len); 
+    // for(let i =result.recieved_message.length-1; i>=0; i-- ){
+
+    //     console.log("inside  fromloo p   at a= ",unreaded_rec_len ,result.recieved_message[i].is_readed==false, " is readed  = ", result.recieved_message[i].is_readed);
+    //     if(result.recieved_message[i].is_readed==false){
+    //         unreaded_rec_len = i+1; 
+    //         console.log("breaking at a= ",unreaded_rec_len); 
+    //         break; 
+    //     }
+    // }  
+
+//     console.log("comming fromloo p   at a= ",unreaded_rec_len);
+//     let r_len =unreaded_rec_len?20-unreaded_rec_len:20; 
+//   let c_len = result.chat_message.length>r_len?r_len:result.chat_message.length
+
+    // let r_len =20-result.recieved_message.length; 
+    
+
+  let c_len = result.chat_message.length<20 ? 0: result.chat_message.length-20 ;
+let c_end_len  = json_data.len ?result.chat_message.length- json_data.len:result.chat_message.length;
     let f_result = []; 
 
-
-
-
-    for(let i=result.chat_message.length-c_len; i<result.chat_message.length; i++){
+    for(let i=c_len; i<c_end_len; i++){
        f_result.push(result.chat_message[i]); 
-
     }
     
-    if(r_len!=20){
+    if(result.recieved_message.length >0 ){
 
         f_result.push({date:json_data.date,time:json_data.time,message:"unreaded message ("+result.recieved_message.length + ")" ,direction:"ser"}); 
         for(let i=0; i<result.recieved_message.length; i++){
@@ -112,13 +134,16 @@ async function fetch_friend( json_data) {
 
 
         }
-        for(let i=0; i<result.sent_message.length; i++){
+
+           for(let i=0; i<result.sent_message.length; i++){
             f_result.push(result.sent_message[i]); 
-         }
+         } 
+        
+        
     
     //  pr("final respose ",); 
     //  pr("r_len ",r_len); 
-    return { status: "ok", data:f_result,name:result2.name,current_status:result2.current_status,img:result2.img,no:result.chat_message.length-c_len};
+    return { status: "ok", data:f_result,name:result2.name,current_status:result2.current_status,img:result2.img,no:c_len};
 
 
 
@@ -137,29 +162,8 @@ async function main(data) {
 
 
     result = await fetch_friend(data);
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 }
-
-// mongoose.connection.on("open", function () {
-//     pr(" ***coonected");
-// })
-
-
-// mongoose.connection.on("close", function () {
-//     pr(" ***Discoonected");
-// })
-// mongoose.connection.on("error", function (error) {
-//     pr(" ***error occured", error);
-// })
-// main({ email: "wonddte@vail.com  ", name: "     ", pass: "123456" });
-
-
-// main({ name:"magic_masala" , friend_name:  "mad_max"}).then(data=>{
-//  pr("result of main ",data); 
-// });
-
-// main({ name:"", friend_name:"mohan", message:"&&&&mandingo sends to mohan?" }); 
-// main({ name:"mohan", friend_name:"mandingos", message:"&&mohan send to madingo ?" }) ;
 module.exports = main;
 

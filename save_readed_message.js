@@ -83,7 +83,7 @@
         connect_to_db();
         let result = await save_readed_message(data);  
        
-        mongoose.connection.close();
+        // mongoose.connection.close();
         // pr("save readed"); 
         return result;
     }

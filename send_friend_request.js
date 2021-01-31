@@ -129,7 +129,7 @@ async function main(data) {
     connect_to_db();
     let result;
     result = await send_friend_request(data);
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 }
 

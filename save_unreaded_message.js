@@ -114,7 +114,7 @@
         connect_to_db();
         let result= await save_unreaded_message(data); 
      
-        mongoose.connection.close();
+        // mongoose.connection.close();
         return result;
     }
 

@@ -94,7 +94,7 @@
         console.log("savereaded file ",data); 
         let result = await save_readed_file(data);  
        
-        mongoose.connection.close();
+        // mongoose.connection.close();
         // pr("save readed"); 
         return result;
     }

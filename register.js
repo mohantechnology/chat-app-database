@@ -113,7 +113,6 @@ async function save_doc(json_data) {
 
         try {
 
-
   //total 50 random character starting with cz
             json_data.u_id =   u_id;
             json_data.p_id = p_id;
@@ -139,7 +138,7 @@ async function save_doc(json_data) {
 
     }
     else {
-        if(json_data.email ==result.email && json_data.password == result.password){
+        if(json_data.sign && json_data.sign=="resend"){
             return {status:"ok",message: "Resended Activation Link", token_str:result.token_str, token_no: result.token_no,email: result.email}; 
         }
 

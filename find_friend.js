@@ -144,7 +144,7 @@ async function main(data) {
     connect_to_db();
     let result;
     result = await fetch_friend_list(data);
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 }
 

@@ -52,7 +52,7 @@ async function fetch_profile_data(json_data) {
 
 
     let result;
-    pr("incoming data at fetch _profile ", json_data);
+    // pr("incoming data at fetch _profile ", json_data);
 
     //findOne user exist in user_detail
 
@@ -61,7 +61,7 @@ async function fetch_profile_data(json_data) {
     // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
     //   result = await   model0.findOne({email: json_data.email, u_id:json_data.u_id,token:json_data.token});
     result = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
-    pr("reslut of model 0 is: ", result);
+    // pr("reslut of model 0 is: ", result);
     if (result == null ) {
         return { status: "error", message: "Not a valid user" };
     }
@@ -75,7 +75,7 @@ async function fetch_profile_data(json_data) {
     for(let  i =0; i<result.friend_list.length; i++){
         f_list_p_id.push(result.friend_list[i].sender_p_id); 
     }
-    pr("f_list p_id ", f_list_p_id); 
+    // pr("f_list p_id ", f_list_p_id); 
     let friend_result =   await model0.find({p_id:{$in:f_list_p_id}},{name:1,profile_img:1,pro_mess:1,u_id:1}); 
 
     //    pr("friend_result ",friend_result);
@@ -137,7 +137,7 @@ async function main(data) {
     connect_to_db();
     let result;
     result = await fetch_profile_data(data);
-    mongoose.connection.close();
+    // mongoose.connection.close();
     return result;
 }
 
