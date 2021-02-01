@@ -8,28 +8,7 @@ var link = process.env.DB_LINK;
 var crypto = require("crypto");
 var user_detail_schema = require("./schema/user_detail");
 const { json } = require('body-parser');
-// var profile_schema  =  require("./schema/profile");
 
-function pr(r1, r2, r3, r4) {
-
-    if (r1) {
-        console.log(r1)
-    }
-
-    if (r2) {
-        console.log(r2)
-    }
-    if (r3) {
-        console.log(r3)
-    }
-    if (r4) {
-        console.log(r4)
-    }
-}
-
-
-
-///***********make name or enter user name and original name  unique */
 
 function connect_to_db() {
     mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
@@ -73,24 +52,18 @@ async function save_doc(json_data) {
 
     let model = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail",
         user_detail_schema) : mongoose.model("user_detail");
-
-    // pr("save funcion called json data is: ", json_data);
+ 
     let result = await model.findOne({ email: json_data.email });
-
-    // console.log("find result is  : ");
-    console.log(result);
-    //##
+ 
     if ( result == null) {
         //generate a random unique_id for collection name 
         let u_id; 
-        // let count=2; 
+ 
         while (true) {
             u_id = "cz"  + crypto.randomBytes(10).toString('hex');
-              result = await model.findOne({ u_id: u_id });
-            // pr("----- result  of  ith iteration is is: -> ", result);
+              result = await model.findOne({ u_id: u_id }); 
             
-            if (result == null) {
-                pr("breaking ")
+            if (result == null) { 
                 break;
             }
         } 
@@ -100,11 +73,9 @@ async function save_doc(json_data) {
             p_id = "pz" + crypto.randomBytes(10).toString('hex');
          
         
-            result = await model.findOne({ p_id:p_id });
-            // pr("----- result  of  ith iteration is is: -> ", result);
+            result = await model.findOne({ p_id:p_id }); 
             
-            if (result == null) {
-                pr("breaking ")
+            if (result == null) { 
                 break;
             }
         }
@@ -122,14 +93,8 @@ async function save_doc(json_data) {
       //******** TODO remove this to unactivate */
         //    json_data.account_status = "active"; 
            json_data.account_type="public";
-            document = new model(json_data);
-            pr("documetn is: ", document);
-            result = await document.save();
-
-            
-            console.log("result of save is; ");
-
-
+            document = new model(json_data); 
+            result = await document.save(); 
             return {status:"ok",message: "Acount Registered Successfully", token_str:json_data.token_str, token_no: json_data.token_no,email: json_data.email}; 
         } catch (error) {
 
@@ -153,36 +118,18 @@ async function save_doc(json_data) {
 async function main(data) {
     connect_to_db();
     let result;
-  
     result = trim_data(data);
-
-
-    if (result.status=="error" ) { return {status:"error",message: "missing data" }};
-
-
-    result = is_validate_data(data); pr("valid data", result);
+   if (result.status=="error" ) { return {status:"error",message: "missing data" }};
+ result = is_validate_data(data); 
 
     if (result.status=="error") {  return result; }
-
-
-
     result = await save_doc(result);
-    //  pr( "model userd_deait", mongoose.models); 
-    // mongoose.connection.close();
+ 
     return result;
 
 
 }
-
-// json_data.email && json_data.name && json_data.password && json_data.conform_password
-// main({ email: "momo@gmail.com ", name: "momo", password: "123456",
-// conform_password: "123456",account_type:"private" }).then(data => {
-//     pr("returned data  main is: ", data);
-
-// }).catch(error => {
-//     pr("error from main ", error);
-// });
-
+ 
 module.exports = main;
 
 

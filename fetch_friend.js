@@ -6,27 +6,7 @@ const mongoose = require("mongoose");
 let link = process.env.DB_LINK;
 var user_detail_schema = require("./schema/user_detail");
 var profile_schema = require("./schema/profile");
-
-
-function pr(r1, r2, r3, r4) {
-
-    if (r1) {
-        console.log(r1)
-    }
-
-    if (r2) {
-        console.log(r2)
-    }
-    if (r3) {
-        console.log(r3)
-    }
-    if (r4) {
-        console.log(r4)
-    }
-}
-
-
-
+ 
 
 function connect_to_db() {
     mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
@@ -41,19 +21,12 @@ async function fetch_friend( json_data) {
 
     
     let result1;
-
-
-    pr("incoming data at fetch _profile ", json_data);
+ 
 
     let model0 = mongoose.models["user_detail"] === undefined ? mongoose.model("user_detail", user_detail_schema) : mongoose.model("user_detail");
 
-    // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
-
-    result1 = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
-    // pr("reslut of model 0 is: ", result1);
-
-    //  find friend detail in user_detail 
-   
+       result1 = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
+      
 
 
     if (result1 == null || result1.account_status != "active") {
@@ -67,9 +40,7 @@ async function fetch_friend( json_data) {
     let model1 = mongoose.models[json_data.u_id] === undefined ? mongoose.model(json_data.u_id, profile_schema) : mongoose.model(json_data.u_id);
 
    let  result = await model1.findOne({ friend_u_id: json_data.friend_u_id }, { recieved_message: 1,chat_message:1,sent_message:1 });
-    // result = JSON.stringify(result,null,4); 
-    // pr("result of find is: ",result);
-
+  
     //transfer recived message to your chat message in your collection 
 
 
@@ -95,25 +66,8 @@ async function fetch_friend( json_data) {
   }
 
 
- pr(result.recieved_message)
-      //check if user hass seen this recieved message **
-    // let unreaded_rec_len =0 ;
-    // console.log("going to loop  at a= ",unreaded_rec_len); 
-    // for(let i =result.recieved_message.length-1; i>=0; i-- ){
-
-    //     console.log("inside  fromloo p   at a= ",unreaded_rec_len ,result.recieved_message[i].is_readed==false, " is readed  = ", result.recieved_message[i].is_readed);
-    //     if(result.recieved_message[i].is_readed==false){
-    //         unreaded_rec_len = i+1; 
-    //         console.log("breaking at a= ",unreaded_rec_len); 
-    //         break; 
-    //     }
-    // }  
-
-//     console.log("comming fromloo p   at a= ",unreaded_rec_len);
-//     let r_len =unreaded_rec_len?20-unreaded_rec_len:20; 
-//   let c_len = result.chat_message.length>r_len?r_len:result.chat_message.length
-
-    // let r_len =20-result.recieved_message.length; 
+//  pr(result.recieved_message)
+  
     
 
   let c_len = result.chat_message.length<20 ? 0: result.chat_message.length-20 ;
@@ -141,8 +95,6 @@ let c_end_len  = json_data.len ?result.chat_message.length- json_data.len:result
         
         
     
-    //  pr("final respose ",); 
-    //  pr("r_len ",r_len); 
     return { status: "ok", data:f_result,name:result2.name,current_status:result2.current_status,img:result2.img,no:c_len};
 
 

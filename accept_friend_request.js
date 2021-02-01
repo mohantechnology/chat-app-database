@@ -6,25 +6,8 @@ const { json } = require('express');
     let link = process.env.DB_LINK; 
     var profile_schema  =  require("./schema/profile");
     var user_detail_schema = require("./schema/user_detail");
-    // var document;
-    // var conn_err;
+  
 
-    function pr(r1, r2, r3, r4) {
-
-        if (r1) {
-            console.log(r1)
-        }
-
-        if (r2) {
-            console.log(r2)
-        }
-        if (r3) {
-            console.log(r3)
-        }
-        if (r4) {
-            console.log(r4)
-        }
-    }
 
 
 
@@ -37,30 +20,6 @@ const { json } = require('express');
 
 
 
-    // function validate_and_trim_data() {
-    //     if (json_data && json_data.name  && json_data.friend_name && json_data.friend_email) {
-    //         json_data.name = json_data.name.trim();
-    //         json_data.friend_email = json_data.friend_email.trim();
-    //         json_data.friend_name = json_data.friend_name.trim();
-
-
-    //     } else {
-    //         return false;
-    //     }
-
-    //     if ( json_data.name==""  && json_data.friend_name=="" && json_data.friend_email==""){
-    //          return false 
-    //     }
-    //     else {
-    //         // pr("reutrn flase"); 
-    //         return true;
-    //     }
-
-    // }
-
-
-   
-    
 
     async function add_to_friend_list(json_data) {
        
@@ -72,7 +31,7 @@ const { json } = require('express');
         // pr("Finding data is; ", { email: json_data.email, token: json_data.token, u_id: json_data.u_id });
     
         result = await model0.findOne({ email: json_data.email, token: json_data.token, u_id: json_data.u_id });
-        pr("reslut of model 0 is checking: ", result);
+        // pr("reslut of model 0 is checking: ", result);
     
     
          
@@ -85,7 +44,7 @@ const { json } = require('express');
        //find u_id of sender 
  if(json_data.signal==1){
    result2 = await model0.findOne({p_id: json_data.friend_p_id });
-        pr("reslut of model 0 is: ", result);
+        // pr("reslut of model 0 is: ", result);
 
     if(!result2){
         return {status: "error",message:"Friend Not Exists"}; 
@@ -110,8 +69,8 @@ const { json } = require('express');
   let result4 = await model0.updateOne({u_id:json_data.u_id} , {"$pull":{
     friend_request: { sender_p_id:json_data.friend_p_id}}     } ); 
 
-pr("result 4 is: ",result4); 
-pr("result2 is: ",result2) ; 
+// pr("result 4 is: ",result4); 
+// pr("result2 is: ",result2) ; 
 //add sender p_id to your friendlist [p_id]
 let result5 = await model0.updateOne({u_id:json_data.u_id} , {"$push":{
     friend_list: { sender_p_id:json_data.friend_p_id}}     } ); 
@@ -151,13 +110,13 @@ let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
                 // pr("documetn is: ", document1);
                 result = await document1.save();
 
-                console.log("result of save is; ");
+                // console.log("result of save is; ");
 
 
 
             } catch (error) {
 
-                console.log((error))
+                // console.log((error))
                 return {status: "error", message: "something went wrong " };
                 
             }
@@ -195,12 +154,12 @@ let result7 = await model0.updateOne({u_id:result2.u_id} , {"$pull":{
                 // pr("documetn is: ", document2);
                 result = await document2.save();
 
-                console.log("result of save is; ",);
+                // console.log("result of save is; ",);
 
             //    return{ status: "ok", message:  "Successfully added to friend list"};
             } catch (error) {
 
-                console.log((error))
+                // console.log((error))
                 return {status: "error", message: "something went wrong " };
             }
 

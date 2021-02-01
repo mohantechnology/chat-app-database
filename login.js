@@ -61,8 +61,7 @@
              
         
                    let temp_id =  crypto.randomBytes(10).toString('hex');
-                //    console.log("find and update ",{email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
-                    result = await  model1.findOneAndUpdate({email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
+                     result = await  model1.findOneAndUpdate({email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
                     pr("result of login is: ",result); 
                     if(result ){
                         return {name:result.name,email:result.email,status:"ok" ,token:temp_id ,u_id:result.u_id ,p_id:result.p_id}; 
@@ -84,21 +83,14 @@
         result = trim_data(data )
          
         if(!result){
-            // mongoose.connection.close();
+       
             return {status:"error",message:"missing data"}; 
         }
         result = await check_login_detail(result);
-        // mongoose.connection.close();
+   
         return result ; 
     }
 
-
-// main({ email: "mohan3@gmail.com ", name: "road" }).then(data => {
-//     pr("returned data  main is: ", data);
-
-// }).catch(error => {
-//     pr("error from main ", error);
-// });
-
+ 
 module.exports = main;
 

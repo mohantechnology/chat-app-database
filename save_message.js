@@ -1,35 +1,12 @@
-
+/*
 require('dotenv').config(); 
 // const { json } = require("express");
 const mongoose = require("mongoose");
 const validator = require("validator");
-let link = process.env.DB_LINK;
-console.log("link is: ",link); 
+let link = process.env.DB_LINK; 
 var json_data;
 var document;
 var model;
-var conn_err;
-
-function pr(r1, r2, r3, r4) {
-
-    if (r1) {
-        console.log(r1)
-    }
-
-    if (r2) {
-        console.log(r2)
-    }
-    if (r3) {
-        console.log(r3)
-    }
-    if (r4) {
-        console.log(r4)
-    }
-}
-
-
-
-
 
 function connect_to_db() {
     mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).catch(error => { });
@@ -53,7 +30,8 @@ function create_model() {
 
     model.findOne({friend_name:json_data.name},function (err,data) {
         if(err){
-            pr("error occurs ",err); 
+            // pr("error occurs ",err); 
+            return err
         }
         else{
             if(!data){
@@ -105,25 +83,25 @@ async function save_message () {
  
 }
 
-
+*/
 
 async function main() {
-    connect_to_db();
-    let result;
-    let data = { 
-        name:"mohan",
-        sender_name:"maggi",
-        sender_email: "sender@gmail.com",
-     reciver_email: "example22@gmail.com",
-      sender_message: "this is sample message ",
-      time:"10:20pm"
-    }
-    json_data = data; 
-  create_model(); 
-  await   save_message(); 
+//     connect_to_db();
+//     let result;
+//     let data = { 
+//         name:"mohan",
+//         sender_name:"maggi",
+//         sender_email: "sender@gmail.com",
+//      reciver_email: "example22@gmail.com",
+//       sender_message: "this is sample message ",
+//       time:"10:20pm"
+//     }
+//     json_data = data; 
+//   create_model(); 
+//      await   save_message(); 
 
-    // mongoose.connection.close();
-    return result;
+//     // mongoose.connection.close();
+//     return result;
 
 
 
