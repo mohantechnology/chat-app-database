@@ -31,12 +31,17 @@
                                                     folder_name:json_data.folder_name
                                                }}}); 
                                     
- 
+                //  console.log("result 1 = ",result); 
                 if(result== null || result.nModified == 0){
+            
                     return {status:"error", message :"Not able to send message. Please Retry Again "};
                 }
+            
+                
                 // save recived message to your friends collection 
-                result = await  model2.updateOne ({ friend_u_id: json_data.u_id},
+
+                let model2  =  mongoose.models[json_data.friend_u_id] === undefined ?  mongoose.model (json_data.friend_u_id,profile_schema) :  mongoose.model (json_data.friend_u_id); 
+               let  result2 = await  model2.updateOne ({ friend_u_id: json_data.u_id},
                     {"$push":{recieved_message:{date:json_data.date,
                     time:json_data.time,
                     message:json_data.message,
@@ -46,9 +51,9 @@
                     file_link: json_data.file_link,
                     mime_type: json_data.mime_type,
                     folder_name:json_data.folder_name,
-               }}});
+               }}})
 
-               if(result== null || result.nModified == 0){
+               if(result2== null || result2.nModified == 0){
                 return {status:"error", message :"Not able to send message. Please Retry Again "};
             }
           
@@ -60,6 +65,7 @@
 
     async function main(data) {
         connect_to_db(); 
+        
         let result= await save_unreaded_file(data); 
  
         return result;

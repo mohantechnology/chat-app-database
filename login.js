@@ -7,26 +7,6 @@
     
 
 
-    function pr(r1, r2, r3, r4) {
-
-        if (r1) {
-            console.log(r1)
-        }
-
-        if (r2) {
-            console.log(r2)
-        }
-        if (r3) {
-            console.log(r3)
-        }
-        if (r4) {
-            console.log(r4)
-        }
-    }
-
-
-
-
     function connect_to_db() {
         mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true,useFindAndModify:false }).catch(error => { });
 
@@ -62,7 +42,7 @@
         
                    let temp_id =  crypto.randomBytes(10).toString('hex');
                      result = await  model1.findOneAndUpdate({email:json_data.email,password:json_data.password},{$set:{token:temp_id}}); 
-                    pr("result of login is: ",result); 
+                    // pr("result of login is: ",result); 
                     if(result ){
                         return {name:result.name,email:result.email,status:"ok" ,token:temp_id ,u_id:result.u_id ,p_id:result.p_id}; 
                     }
